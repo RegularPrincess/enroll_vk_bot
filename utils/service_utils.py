@@ -180,7 +180,7 @@ def send_data_to_uon(data, uid):
     note = 'Примечания : {}'.format("\n".join(data.answers))
     payload = {
         'r_dat': date_str,
-        'r_u_id': '3835',
+        'r_u_id': cfg.default_admin_id,
         'u_name': data.name,
         'source': 'Бот вконтакте',
         'u_phone': data.number,
@@ -189,7 +189,7 @@ def send_data_to_uon(data, uid):
         'u_note': note
     }
 
-    url = 'https://api.u-on.ru/6COVU66eHPjf667alVq3/lead/create.json'
+    url = 'https://api.u-on.ru/{}/lead/create.json'.format(cfg.uon_key)
     response = requests.post(url, data=payload)
     print(response)
 
