@@ -44,10 +44,15 @@ def make_subs_file(uid):
     filename = 'subs.csv'
     out = open(filename, 'a')
     text = 'ID; Имя; Статус; Подписан на рассылку\n'
-    out.write(text)
+    i = 0
     for x in bot_followers:
-        text = '{};{};{};{}\n'.format(x.uid, x.name, x.status, x.mess_allowed)
-        out.write(text)
+        i += 1
+        text += '{};{};{};{}\n'.format(x.uid, x.name, x.status, x.mess_allowed)
+        if i > 1000:
+            out.write(text)
+            text = ''
+            i = 0
+    out.write(text)
     out.close()
     res = vk.get_doc_upload_server1(uid)
     print(res)
