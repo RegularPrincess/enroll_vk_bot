@@ -1,5 +1,8 @@
 import os
+import config as cfg
 from threading import Thread
+import utils.service_utils as utils
+import consts as cnst
 
 import time
 
@@ -52,3 +55,33 @@ class ThreadBrdcst(Thread):
             time.sleep(wait_time)
             db.vk_emailing_to_all_subs(self.bcst.msg)
             time.sleep(61)
+
+
+class ThreadParseGroup(Thread):
+    def __init__(self, uid, group_id=cfg.group_id):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.uid = uid
+        self.group_id = group_id
+
+    def run(self):
+        members_count = utils.get_group_count()
+        msg = cnst.MSG_MEMBERS_COUNT.format(members_count)
+        vk.send_message(self.uid, msg)
+        vk.send_message(self.uid, cnst.MSG_PLEASE_STAND_BY)
+        added_count = utils.parse_group(members_count)
+        msg = cnst.MSG_ADDED_COUNT.format(added_count)
+        vk.send_message(self.uid, msg)
+
+
+class ThreadSubs(Thread):
+    def __init__(self, uid, group_id=cfg.group_id):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.uid = uid
+        self.group_id = group_id
+
+    def run(self):
+        vk.send_message(self.uid, cnst.MSG_PLEASE_STAND_BY)
+        vk_doc_link = utils.make_subs_file(self.uid)
+        vk.send_message_doc(self.uid, cnst.MSG_SUBS, vk_doc_link)

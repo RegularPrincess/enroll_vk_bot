@@ -32,9 +32,8 @@ def admin_message_processing(uid, uname, text):
         vk.send_message_keyboard(uid, cnst.MSG_ACCEPT_BROADCAST, cnst.KEYBOARD_CANCEL)
 
     elif text == cnst.BTN_SUBS:
-        vk.send_message(uid, cnst.MSG_PLEASE_STAND_BY)
-        vk_doc_link = utils.make_subs_file(uid)
-        vk.send_message_doc(uid, cnst.MSG_SUBS, vk_doc_link)
+        pg = mt.ThreadSubs(uid)
+        pg.start()
 
     elif text == cnst.BTN_ADMINS:
         IN_ADMIN_PANEL[uid] = cnst.BTN_ADMINS
@@ -70,13 +69,8 @@ def admin_message_processing(uid, uname, text):
 
     elif text.lower() == cnst.CMD_PARSE_GROUP:
         if db.is_admin(uid):
-            members_count = utils.get_group_count()
-            msg = cnst.MSG_MEMBERS_COUNT.format(members_count)
-            vk.send_message(uid, msg)
-            vk.send_message(uid, cnst.MSG_PLEASE_STAND_BY)
-            added_count = utils.parse_group(members_count)
-            msg = cnst.MSG_ADDED_COUNT.format(added_count)
-            vk.send_message(uid, msg)
+            pg = mt.ThreadParseGroup(uid)
+            pg.start()
         else:
             vk.send_message_keyboard(uid, cnst.MSG_YOU_NOT_ADMIN, cnst.KEYBOARD_USER)
 
