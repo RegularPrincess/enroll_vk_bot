@@ -127,9 +127,9 @@ def admin_message_processing(uid, uname, text):
                 IN_ADMIN_PANEL[uid] = ''
 
     elif IN_ADMIN_PANEL[uid] == cnst.BTN_BROADCAST:
-        count = db.vk_emailing_to_all_subs(text)
+        count = db.vk_emailing_to_all_subs_keyboard(text)
         vk.send_message_keyboard(uid, cnst.MSG_BROADCAST_COMPLETED.format(count), cnst.KEYBOARD_ADMIN)
-        IN_ADMIN_PANEL[uid] = ''
+        IN_ADMIN_PANEL.clear()
 
     elif IN_ADMIN_PANEL[uid] == cnst.BTN_ADMINS:
         try:

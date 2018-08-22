@@ -53,7 +53,7 @@ class ThreadBrdcst(Thread):
             if plane >= now:
                 wait_time = (plane - now).total_seconds()
             time.sleep(wait_time)
-            db.vk_emailing_to_all_subs(self.bcst.msg)
+            db.vk_emailing_to_all_subs_keyboard(self.bcst.msg)
             time.sleep(61)
 
 

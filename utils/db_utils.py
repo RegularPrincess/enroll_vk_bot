@@ -51,7 +51,7 @@ with sqlite3.connect(config.db_name) as connection:
     connection.commit()
 
 
-def vk_emailing_to_all_subs(text):
+def vk_emailing_to_all_subs_keyboard(text):
     """
     Разослать текст всем подписчикам, кому возможно группы
     """
@@ -63,9 +63,9 @@ def vk_emailing_to_all_subs(text):
             arr.append(u.uid)
             count += 1
         if len(arr) == 100:
-            vklib.send_message_much(arr, text)
+            vklib.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
             arr = []
-    vklib.send_message_much(arr, text)
+    vklib.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
     return count
 
 
