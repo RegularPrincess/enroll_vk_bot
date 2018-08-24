@@ -6,7 +6,7 @@ from sqlite3 import dbapi2 as sqlite3
 import config
 import consts as cnst
 import model as m
-from utils import vklib
+# from utils import vklib
 import datetime
 
 
@@ -49,24 +49,6 @@ with sqlite3.connect(config.db_name) as connection:
         config.admin_id, config.admin_name)
     cursor.execute(sql)
     connection.commit()
-
-
-def vk_emailing_to_all_subs_keyboard(text):
-    """
-    Разослать текст всем подписчикам, кому возможно группы
-    """
-    count = 0
-    arr = []
-    users = get_bot_followers()
-    for u in users:
-        if u.is_msging_allowed():
-            arr.append(u.uid)
-            count += 1
-        if len(arr) == 100:
-            vklib.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
-            arr = []
-    vklib.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
-    return count
 
 
 def get_bot_admins():
@@ -187,6 +169,20 @@ def follower_is_leave(uid):
         count = int(res[0])
         connection.commit()
         return count != 0
+
+
+def get_follower_name(uid):
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''SELECT name FROM known_users ku WHERE uid == ?'''
+        cursor.execute(sql, (uid, ))
+        res = cursor.fetchone()
+        if len(res) < 1:
+            name = None
+        else:
+            name = res[0]
+        connection.commit()
+        return name
 
 
 def get_msg_allowed_count():

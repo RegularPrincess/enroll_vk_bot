@@ -126,13 +126,15 @@ def is_email_valid(email):
 
 
 def new_user_or_not(uid, uname):
+    if uname is None:
+        uname = vk.get_user_name(uid)
     e = db.is_known_user(uid)
     if e or db.is_admin(uid):
         if e:
             db.set_bot_follower_mess_allowed(uid, 1)
     else:
         db.add_bot_follower(uid, uname, status=cnst.USER_NOT_SUB_STATUS, msg_allowed=1)
-        vk.send_message_keyboard(uid, cnst.MSG_WELCOME_TO_COURSE.format(uname), cnst.KEYBOARD_USER)
+        vk.send_message_keyboard(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), cnst.KEYBOARD_USER)
 
 
 def parse_bcst(text):
@@ -232,3 +234,29 @@ def isint(s):
         return True
     except ValueError:
         return False
+
+
+def send_welcome_msg(uid, uname, keyboard):
+    if uname is None:
+        uname = vk.get_user_name(uid)
+    vk.send_message_keyboard(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), keyboard)
+
+
+def emailing_to_all_subs_keyboard(uid, text):
+    """
+    Разослать текст всем подписчикам, кому возможно группы
+    """
+    count = 0
+    arr = []
+    users = db.get_bot_followers()
+    for u in users:
+        if u.is_msging_allowed():
+            arr.append(u.uid)
+            count += 1
+        if len(arr) == 100:
+            vk.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
+            arr = []
+    vk.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
+    vk.send_message_keyboard(uid, cnst.MSG_BROADCAST_COMPLETED.format(count), cnst.KEYBOARD_ADMIN)
+    return count
+

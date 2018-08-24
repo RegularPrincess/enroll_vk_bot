@@ -4,6 +4,8 @@
 from flask import Flask
 from flask import json
 from flask import request
+import logging as log
+from timeit import default_timer as timer
 
 import config
 import service as s
@@ -30,13 +32,17 @@ def debug():
 
 @app.route(rule='/{0}'.format(bot_name), methods=['POST'])
 def processing():
+    t = timer()
     data = json.loads(request.data)
 
     if 'secret' not in data.keys():
+        print('Not vk')
         return 'Not VK.'
     elif not data['secret'] == secret_key:
+        print(data['secret'] + "  token не подходит")
         return 'Bad query.'
     if data['type'] == 'confirmation':
+        print("Группа привязана!")
         return confirmation_token
     elif data['type'] == 'group_join':
         uid = data['object']['user_id']
@@ -46,6 +52,8 @@ def processing():
         uid = data['object']['from_id']
         text = data['object']['text']
         answer = s.message_processing(uid, text)
+        elapsed = timer() - t
+        print("Общее время:" + str(elapsed))
         return answer
     elif data['type'] == 'group_leave':
         uid = data['object']['user_id']
@@ -61,10 +69,13 @@ def processing():
         return answer
 
 
+
 def main(argv):
     port = int(argv[1])
+    log.info("Start")
     app.run(host='0.0.0.0', port=port, debug=False)
 
 if __name__ == '__main__':
+    log.basicConfig(filename="bot.log", level=log.INFO)
     import sys
     main(sys.argv[0:])

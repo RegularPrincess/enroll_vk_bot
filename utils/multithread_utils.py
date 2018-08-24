@@ -1,15 +1,14 @@
 import os
 import config as cfg
 from threading import Thread
-import utils.service_utils as utils
-import consts as cnst
-
-import time
-
-from datetime import datetime, date, timedelta
-
 import utils.db_utils as db
 import utils.vklib as vk
+import utils.service_utils as us
+import consts as cnst
+import json
+import requests
+import time
+from datetime import datetime, date, timedelta
 import model as m
 import utils.service_utils as su
 
@@ -53,7 +52,7 @@ class ThreadBrdcst(Thread):
             if plane >= now:
                 wait_time = (plane - now).total_seconds()
             time.sleep(wait_time)
-            db.vk_emailing_to_all_subs_keyboard(self.bcst.msg)
+            us.emailing_to_all_subs_keyboard(self.bcst.msg)
             time.sleep(61)
 
 
@@ -65,11 +64,11 @@ class ThreadParseGroup(Thread):
         self.group_id = group_id
 
     def run(self):
-        members_count = utils.get_group_count()
+        members_count = su.get_group_count()
         msg = cnst.MSG_MEMBERS_COUNT.format(members_count)
         vk.send_message(self.uid, msg)
         vk.send_message(self.uid, cnst.MSG_PLEASE_STAND_BY)
-        added_count = utils.parse_group(members_count)
+        added_count = su.parse_group(members_count)
         msg = cnst.MSG_ADDED_COUNT.format(added_count)
         vk.send_message(self.uid, msg)
 
@@ -82,6 +81,108 @@ class ThreadSubs(Thread):
         self.group_id = group_id
 
     def run(self):
-        vk.send_message(self.uid, cnst.MSG_PLEASE_STAND_BY)
-        vk_doc_link = utils.make_subs_file(self.uid)
+        vk_doc_link = su.make_subs_file(self.uid)
         vk.send_message_doc(self.uid, cnst.MSG_SUBS, vk_doc_link)
+
+
+class ThreadSendMsgWelcome(Thread):
+    def __init__(self, uid, uname, keyboard, group_id=cfg.group_id):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.uid = uid
+        self.uname = uname
+        self.keyboard = keyboard
+        self.group_id = group_id
+
+    def run(self):
+        su.send_welcome_msg(self.uid, self.uname, self.keyboard)
+
+
+class ThreadSendMsg(Thread):
+    def __init__(self, uid, msg, keyboard=None, group_id=cfg.group_id):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.uid = uid
+        self.msg = msg
+        self.keyboard = keyboard
+        self.group_id = group_id
+
+    def run(self):
+        if self.keyboard is None:
+            vk.send_message(self.uid, self.msg)
+        else:
+            vk.send_message_keyboard(self.uid, self.msg, self.keyboard)
+
+
+class ThreadNewUserOrNote(Thread):
+    def __init__(self, uid, uname):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.uid = uid
+        self.uname = uname
+
+    def run(self):
+        us.new_user_or_not(self.uid, self.uname)
+
+
+class ThreadEmailingToAllSubs(Thread):
+    def __init__(self, uid, text):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.text = text
+        self.uid = uid
+
+    def run(self):
+        us.emailing_to_all_subs_keyboard(self.uid, self.text)
+
+
+class ThreadSendDataToUON(Thread):
+    def __init__(self, data, uid):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.data = data
+        self.uid = uid
+
+    def run(self):
+        us.send_data_to_uon(self.data, self.uid)
+
+
+class ThreadSendMsgMuch(Thread):
+    def __init__(self, user_ids, text):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.user_ids = user_ids
+        self.text = text
+
+    def run(self):
+        vk.send_message_much(self.user_ids, self.text)
+
+
+def send_message(uid, msg, keyboard=None):
+    t = ThreadSendMsg(uid, msg, keyboard)
+    t.start()
+
+
+def new_user_or_not(uid, uname):
+    t = ThreadNewUserOrNote(uid, uname)
+    t.start()
+
+
+def send_msg_welcome(uid, uname, keyboard, group_id=cfg.group_id):
+    t = ThreadSendMsgWelcome(uid, uname, keyboard, group_id)
+    t.start()
+
+
+def emailing_to_all_subs_keyboard(uid, text):
+    t = ThreadEmailingToAllSubs(uid, text)
+    t.start()
+
+
+def send_data_to_uon(data, uid):
+    t = ThreadSendDataToUON(data, uid)
+    t.start()
+
+
+def send_msg_much(user_ids, text):
+    t = ThreadSendMsgMuch(user_ids, text)
+    t.start()
