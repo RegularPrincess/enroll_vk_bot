@@ -67,10 +67,8 @@ def processing():
 
 def main(argv):
     port = int(argv[1])
-    log.info("Start")
     app.run(host='0.0.0.0', port=port, debug=False)
 
 if __name__ == '__main__':
-    log.basicConfig(filename="bot.log", level=log.INFO)
     import sys
     main(sys.argv[0:])
