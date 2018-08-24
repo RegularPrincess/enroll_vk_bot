@@ -4,7 +4,6 @@
 import json
 import requests
 import config
-from timeit import default_timer as timer
 import logging as log
 
 
@@ -31,7 +30,6 @@ def send_message(user_id, text):
     """
     Send VK message
     """
-    t = timer()
     data = {
         'message': text,
         'user_id': user_id,
@@ -39,8 +37,6 @@ def send_message(user_id, text):
         'v': api_ver
     }
     r = requests.post(config.vk_api_url + 'messages.send', data=data)
-    elapsed = timer() - t
-    print("Время отправки сообщения " + str(elapsed))
     print(r)
 
 
@@ -48,7 +44,6 @@ def send_message_keyboard(user_id, text, keyboard):
     """
     Send VK message with keyboard. Keyboard - json dictionary
     """
-    t = timer()
     data = {
         'message': text,
         'user_id': user_id,
@@ -57,9 +52,6 @@ def send_message_keyboard(user_id, text, keyboard):
         'v': api_ver
     }
     res = requests.post(config.vk_api_url + 'messages.send', data=data)
-    elapsed = timer() - t
-    log.info("Время отправки сообщения с клавиатурой " + str(elapsed))
-    print("Время отправки сообщения с клавиатурой" + str(elapsed))
     print(res)
 
 

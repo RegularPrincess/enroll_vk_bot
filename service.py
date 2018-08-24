@@ -8,7 +8,6 @@ import model as m
 from utils import db_utils as db
 from utils import service_utils as utils
 import utils.multithread_utils as mt
-from timeit import default_timer as timer
 
 READY_TO_ENROLL = {}
 IN_ADMIN_PANEL = {}
@@ -174,7 +173,6 @@ def admin_message_processing(uid, uname, text):
 
 
 def message_processing(uid, text):
-    t = timer()
     uname = db.get_follower_name(uid)
     if uid in IN_ADMIN_PANEL:
         admin_message_processing(uid, uname, text)
@@ -272,8 +270,6 @@ def message_processing(uid, text):
         thread = mt.ThreadNewUserOrNote(uid, uname)
         thread.start()
         # mt.send_message(uid, cnst.MSG_DEFAULT_ANSWER)
-    elapsed = timer() - t
-    print("Message processing " + str(elapsed))
     return 'ok'
 
 

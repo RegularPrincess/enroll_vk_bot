@@ -5,7 +5,6 @@ from flask import Flask
 from flask import json
 from flask import request
 import logging as log
-from timeit import default_timer as timer
 
 import config
 import service as s
@@ -32,7 +31,6 @@ def debug():
 
 @app.route(rule='/{0}'.format(bot_name), methods=['POST'])
 def processing():
-    t = timer()
     data = json.loads(request.data)
 
     if 'secret' not in data.keys():
@@ -52,8 +50,6 @@ def processing():
         uid = data['object']['from_id']
         text = data['object']['text']
         answer = s.message_processing(uid, text)
-        elapsed = timer() - t
-        print("Общее время:" + str(elapsed))
         return answer
     elif data['type'] == 'group_leave':
         uid = data['object']['user_id']
@@ -67,7 +63,6 @@ def processing():
         uid = data['object']['user_id']
         answer = s.message_deny(uid)
         return answer
-
 
 
 def main(argv):
