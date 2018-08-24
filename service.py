@@ -16,7 +16,7 @@ READY_TO_LEAVE = {}
 thread_manager = mt.ThreadManager()
 
 thread_manager.run_brdcst_shedule()
-# utils.send_message_admins_after_restart()
+utils.send_message_admins_after_restart()
 
 
 def admin_message_processing(uid, uname, text):
