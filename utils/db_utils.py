@@ -177,7 +177,7 @@ def get_follower_name(uid):
         sql = '''SELECT name FROM known_users ku WHERE uid == ?'''
         cursor.execute(sql, (uid, ))
         res = cursor.fetchone()
-        if len(res) < 1:
+        if res is None:
             name = None
         else:
             name = res[0]

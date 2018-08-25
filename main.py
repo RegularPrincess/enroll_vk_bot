@@ -63,6 +63,7 @@ def processing():
         uid = data['object']['user_id']
         answer = s.message_deny(uid)
         return answer
+    return 'ok'
 
 
 def main(argv):
