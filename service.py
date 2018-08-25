@@ -21,7 +21,7 @@ utils.send_message_admins_after_restart()
 def admin_message_processing(uid, uname, text):
     if text == cnst.MSG_ADMIN_EXIT:
         utils.del_uid_from_dict(uid, IN_ADMIN_PANEL)
-        mt.send_message(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), cnst.KEYBOARD_USER)
+        mt.send_msg_welcome(uid, uname, cnst.KEYBOARD_USER)
 
     elif text == cnst.BTN_BROADCAST:
         IN_ADMIN_PANEL[uid] = cnst.BTN_BROADCAST
