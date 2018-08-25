@@ -31,6 +31,7 @@ def debug():
 
 @app.route(rule='/{0}'.format(bot_name), methods=['POST'])
 def processing():
+    print('Пришел пост запрос')
     data = json.loads(request.data)
 
     if 'secret' not in data.keys():
@@ -67,6 +68,7 @@ def processing():
 
 
 def main(argv):
+    print ("Старт")
     port = int(argv[1])
     app.run(host='0.0.0.0', port=port, debug=False)
 
