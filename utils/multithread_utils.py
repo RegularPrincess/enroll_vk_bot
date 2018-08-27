@@ -87,6 +87,7 @@ class ThreadParse24Subs(Thread):
         self.group_id = group_id
 
     def run(self):
+        print(vk.parse_24_subs(self.uids).text)
         res = vk.parse_24_subs(self.uids).text["response"]
         for i in range(0, len(res)//3):
             c = i*3
