@@ -321,5 +321,5 @@ def message_deny(uid):
     db.set_bot_follower_mess_allowed(uid, 0)
     return 'ok'
 #
-pg = mt.ThreadParseGroup(cfg.admin_id)
-pg.start()
+# pg = mt.ThreadParseGroup(cfg.admin_id)
+# pg.start()

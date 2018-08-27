@@ -108,7 +108,6 @@ class ThreadParseGroup(Thread):
         vk.send_message(self.uid, msg + '\n ' + cnst.MSG_PLEASE_STAND_BY)
         follower_list = db.get_bot_followers(only_id=True)
         iterations = members_count // 1000 + 1
-        users_added = 0
         for x in range(iterations):
             users = vk.get_group_memebers(self.group_id, offset=x * 1000, count=1000)
             for_parse = []
@@ -122,7 +121,7 @@ class ThreadParseGroup(Thread):
                         t.start()
                         for_parse = []
                         thread_count += 1
-                        if thread_count > 12:
+                        if thread_count > 6:
                             time.sleep(2)
                             thread_count = 0
                 except Exception as e:
