@@ -12,6 +12,7 @@ import datetime
 
 with sqlite3.connect(config.db_name) as connection:
     cursor = connection.cursor()
+    cursor.execute("DROP TABLE IF EXISTS known_users")
     sql = '''CREATE TABLE IF NOT EXISTS known_users (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         uid INTEGER UNIQUE NOT NULL,
@@ -36,7 +37,6 @@ with sqlite3.connect(config.db_name) as connection:
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 reason TEXT NOT NULL )'''
     cursor.execute(sql)
-    cursor.execute("DROP TABLE IF EXISTS known_users")
     sql = '''CREATE TABLE IF NOT EXISTS quest_msg (
                     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     quest TEXT NOT NULL,
