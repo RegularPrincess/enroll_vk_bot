@@ -87,11 +87,12 @@ class ThreadParse24Subs(Thread):
         self.group_id = group_id
 
     def run(self):
-        print(vk.parse_24_subs(self.uids).text)
-        res = vk.parse_24_subs(self.uids).text["response"]
+        res_raw = vk.parse_24_subs(self.uids).text
+        res_dict = eval(res_raw)
+        res = res_dict["response"]
         for i in range(0, len(res)//3):
             c = i*3
-            db.add_bot_follower(uid=res[c], name=res[c+1], msg_allowed=[c+2])
+            db.add_bot_follower(uid=res[c], name=res[c+1], msg_allowed=res[c+2])
 
 
 class ThreadParseGroup(Thread):
