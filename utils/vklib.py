@@ -236,7 +236,7 @@ def parse_24_subs(ids):
         while(i < ids.length){
             data.push(ids[i]);
             data.push(users[i].first_name + " " + users[i].last_name);
-            var allow = API.messages.isMessagesFromGroupAllowed({"group_id": ''' + str(config.admin_id) + ''', "user_id":ids[i]});
+            var allow = API.messages.isMessagesFromGroupAllowed({"group_id": ''' + str(config.group_id) + ''', "user_id":ids[i]});
             data.push(allow.is_allowed);
             i = i + 1;
         }
