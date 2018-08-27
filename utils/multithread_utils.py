@@ -55,22 +55,16 @@ class ThreadBrdcst(Thread):
             us.emailing_to_all_subs_keyboard(self.bcst.msg)
             time.sleep(61)
 
-
-class ThreadParseGroup(Thread):
-    def __init__(self, uid, group_id=cfg.group_id):
-        """Инициализация потока"""
-        Thread.__init__(self)
-        self.uid = uid
-        self.group_id = group_id
-
-    def run(self):
-        members_count = su.get_group_count()
-        msg = cnst.MSG_MEMBERS_COUNT.format(members_count)
-        vk.send_message(self.uid, msg)
-        vk.send_message(self.uid, cnst.MSG_PLEASE_STAND_BY)
-        added_count = su.parse_group(members_count)
-        msg = cnst.MSG_ADDED_COUNT.format(added_count)
-        vk.send_message(self.uid, msg)
+#
+# class ThreadParseGroup(Thread):
+#     def __init__(self, uid, group_id=cfg.group_id):
+#         """Инициализация потока"""
+#         Thread.__init__(self)
+#         self.uid = uid
+#         self.group_id = group_id
+#
+#     def run(self):
+#
 
 
 class ThreadSubs(Thread):
@@ -83,6 +77,61 @@ class ThreadSubs(Thread):
     def run(self):
         vk_doc_link = su.make_subs_file(self.uid)
         vk.send_message_doc(self.uid, cnst.MSG_SUBS, vk_doc_link)
+
+
+class ThreadParse24Subs(Thread):
+    def __init__(self, uids, group_id=cfg.group_id):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.uids = uids
+        self.group_id = group_id
+
+    def run(self):
+        res = vk.parse_24_subs(self.uids)["response"]
+        for i in range(0, len(res)//3):
+            c = i*3
+            db.add_bot_follower(uid=res[c], name=res[c+1], msg_allowed=[c+2])
+
+
+class ThreadParseGroup(Thread):
+    def __init__(self, uid, group_id=cfg.group_id):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.uid = uid
+        self.group_id = group_id
+
+    def run(self):
+        members_count = su.get_group_count()
+        msg = cnst.MSG_MEMBERS_COUNT.format(members_count)
+        vk.send_message(self.uid, msg + '\n ' + cnst.MSG_PLEASE_STAND_BY)
+        follower_list = db.get_bot_followers(only_id=True)
+        iterations = members_count // 1000 + 1
+        users_added = 0
+        for x in range(iterations):
+            users = vk.get_group_memebers(self.group_id, offset=x * 1000, count=1000)
+            for_parse = []
+            thread_count = 0
+            for user_id in users:
+                try:
+                    if not user_id in follower_list:
+                        for_parse.append(user_id)
+                    if len(for_parse) == 24:
+                        t = ThreadParse24Subs(for_parse)
+                        t.start()
+                        for_parse = []
+                        thread_count += 1
+                        if thread_count > 12:
+                            time.sleep(2)
+                            thread_count = 0
+                except Exception as e:
+                    print(e)
+                    pass
+            if len(for_parse) > 0:
+                t = ThreadParse24Subs(for_parse)
+                t.start()
+
+        msg = cnst.MSG_ADDED_COUNT
+        vk.send_message(self.uid, msg)
 
 
 class ThreadSendMsgWelcome(Thread):

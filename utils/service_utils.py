@@ -73,26 +73,6 @@ def get_group_count(group_id=cfg.group_id):
     return int(members_count)
 
 
-def parse_group(members_count, group_id=cfg.group_id):
-    follower_list = db.get_bot_followers(only_id=True)
-    iterations = members_count // 1000 + 1
-    users_added = 0
-    for x in range(iterations):
-        users = vk.get_group_memebers(group_id, offset=x * 1000, count=1000)
-        for user_id in users:
-            try:
-                if not user_id in follower_list:
-                    username = vk.get_user_name(user_id)
-                    msg_allowed = 0
-                    if vk.is_messages_allowed(user_id):
-                        msg_allowed = 1
-                    db.add_bot_follower(user_id, username, msg_allowed=msg_allowed)
-                    users_added += 1
-            except Exception as e:
-                pass
-    return users_added
-
-
 def del_uid_from_dict(uid, dict_):
     if uid in dict_:
         del dict_[uid]
@@ -134,7 +114,7 @@ def new_user_or_not(uid, uname):
             db.set_bot_follower_mess_allowed(uid, 1)
     else:
         db.add_bot_follower(uid, uname, status=cnst.USER_NOT_SUB_STATUS, msg_allowed=1)
-        vk.send_message_keyboard(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), cnst.KEYBOARD_USER)
+        # vk.send_message_keyboard(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), cnst.KEYBOARD_USER)
 
 
 def parse_bcst(text):

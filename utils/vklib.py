@@ -226,3 +226,25 @@ def send_message_doc(user_id, text, doc):
         'v': api_ver
     }
     requests.post(config.vk_api_url + 'messages.send', data=data)
+
+
+def parse_24_subs(ids):
+    code = 'var ids = ' + str(ids) + '''
+    ;var i = 0;        
+        var data = [];
+        var users = API.users.get({"user_ids":ids});
+        while(i < ids.length){
+            data.push(ids[i]);
+            data.push(users[i].first_name + " " + users[i].last_name);
+            var allow = API.messages.isMessagesFromGroupAllowed({"group_id": ''' + str(config.admin_id) + ''', "user_id":ids[i]});
+            data.push(allow.is_allowed);
+            i = i + 1;
+        }
+        return data;'''
+    data = {
+        'code': code,
+        'access_token': config.token,
+        'v': api_ver
+    }
+    res = requests.post(config.vk_api_url + 'execute', data=data)
+    return res

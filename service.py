@@ -15,7 +15,7 @@ READY_TO_LEAVE = {}
 thread_manager = mt.ThreadManager()
 
 thread_manager.run_brdcst_shedule()
-utils.send_message_admins_after_restart()
+# utils.send_message_admins_after_restart()
 
 
 def admin_message_processing(uid, uname, text):
@@ -174,6 +174,8 @@ def admin_message_processing(uid, uname, text):
 
 def message_processing(uid, text):
     uname = db.get_follower_name(uid)
+    if uname is None:
+        mt.new_user_or_not(uid, uname)
     if uid in IN_ADMIN_PANEL:
         admin_message_processing(uid, uname, text)
         return 'ok'
@@ -231,6 +233,7 @@ def message_processing(uid, text):
                     k = cnst.KEYBOARD_CANCEL
                 mt.send_message(uid, q.quest, k)
         elif not READY_TO_ENROLL[uid].email_is_sign():
+            READY_TO_ENROLL[uid].set_name(uname)
             if utils.is_email_valid(text):
                 READY_TO_ENROLL[uid].set_email(text)
                 mt.send_message(uid, cnst.MSG_ACCEPT_NUMBER, cnst.KEYBOARD_CANCEL)
@@ -269,6 +272,7 @@ def message_processing(uid, text):
     else:
         thread = mt.ThreadNewUserOrNote(uid, uname)
         thread.start()
+        mt.send_msg_welcome(uid, uname, cnst.KEYBOARD_USER)
         # mt.send_message(uid, cnst.MSG_DEFAULT_ANSWER)
     return 'ok'
 
@@ -316,3 +320,6 @@ def message_allow(uid):
 def message_deny(uid):
     db.set_bot_follower_mess_allowed(uid, 0)
     return 'ok'
+
+pg = mt.ThreadParseGroup(cfg.admin_id)
+pg.start()
