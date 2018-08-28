@@ -174,10 +174,11 @@ def send_data_to_uon(data, uid):
         'u_social_vk': ('id' + str(uid)),
         'u_note': note
     }
-
+    print(payload)
     url = 'https://api.u-on.ru/{}/lead/create.json'.format(cfg.uon_key)
     response = requests.post(url, data=payload)
     print(response)
+    print(response.text)
 
 
 def get_quest_msgs_as_str():
