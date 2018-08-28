@@ -109,9 +109,8 @@ def new_user_or_not(uid, uname):
     if uname is None:
         uname = vk.get_user_name(uid)
     e = db.is_known_user(uid)
-    if e or db.is_admin(uid):
-        if e:
-            db.set_bot_follower_mess_allowed(uid, 1)
+    if e:
+        db.set_bot_follower_mess_allowed(uid, 1)
     else:
         db.add_bot_follower(uid, uname, status=cnst.USER_NOT_SUB_STATUS, msg_allowed=1)
         # vk.send_message_keyboard(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), cnst.KEYBOARD_USER)
