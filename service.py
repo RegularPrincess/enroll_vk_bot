@@ -269,7 +269,7 @@ def message_processing(uid, text):
             mt.send_message(uid, cnst.MSG_ADMIN_PANEL, cnst.KEYBOARD_ADMIN)
         else:
             mt.send_message(uid, cnst.MSG_YOU_NOT_ADMIN, cnst.KEYBOARD_USER)
-    elif text.lower() == "clearME":
+    elif text.lower() == "clearme":
         mt.send_message(uid, "clear", keyboard=cnst.EMPTY_KEYBOARD)
     else:
         thread = mt.ThreadNewUserOrNote(uid, uname)
