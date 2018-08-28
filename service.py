@@ -272,7 +272,7 @@ def message_processing(uid, text):
     else:
         thread = mt.ThreadNewUserOrNote(uid, uname)
         thread.start()
-        mt.send_msg_welcome(uid, uname, cnst.KEYBOARD_USER)
+        # mt.send_msg_welcome(uid, uname, cnst.KEYBOARD_USER)
         # mt.send_message(uid, cnst.MSG_DEFAULT_ANSWER)
     return 'ok'
 
