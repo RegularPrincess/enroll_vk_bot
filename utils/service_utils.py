@@ -162,7 +162,7 @@ def get_keyboard_from_list(list, def_btn=cnst.enroll_btn):
 def send_data_to_uon(data, uid):
     today = datetime.datetime.today()
     t = today.time()
-    date_str = '{} {}:{}:{}'.format(today.date(), t.hour, t.minute, t.second)
+    date_str = '{} {}:{}:{}'.format(today.date(), t.hour + cfg.time_zone_from_msk, t.minute, t.second)
     note = 'Примечания : {}'.format("\n".join(data.answers))
     payload = {
         'r_dat': date_str,
