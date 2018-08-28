@@ -166,7 +166,7 @@ def send_data_to_uon(data, uid):
     note = 'Примечания : {}'.format("\n".join(data.answers))
     payload = {
         'r_dat': date_str,
-        'r_u_id': cfg.default_admin_id,
+        'r_u_id': cfg.default_гщт_admin_id,
         'u_name': data.name,
         'source': 'Бот вконтакте',
         'u_phone': data.number,
@@ -239,4 +239,3 @@ def emailing_to_all_subs_keyboard(uid, text):
     vk.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
     vk.send_message_keyboard(uid, cnst.MSG_BROADCAST_COMPLETED.format(count), cnst.KEYBOARD_ADMIN)
     return count
-
