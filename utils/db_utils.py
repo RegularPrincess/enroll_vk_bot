@@ -41,14 +41,23 @@ with sqlite3.connect(config.db_name) as connection:
                     quest TEXT NOT NULL,
                     answs TEXT NOT NULL)'''
     cursor.execute(sql)
+    sql = '''CREATE TABLE IF NOT EXISTS msgs (
+           id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+           first_msg TEXT NOT NULL UNIQUE,
+           mail_request TEXT NOT NULL,
+           number_request TEXT NOT NULL,
+           uniq INTEGER DEFAULT 0 UNIQUE)'''
+    cursor.execute(sql)
     sql = '''CREATE INDEX IF NOT EXISTS uid_known_users ON known_users (uid)'''
     cursor.execute(sql)
     # Add base admins to bot
     sql = '''INSERT OR IGNORE INTO admins (uid, name) VALUES ({!s}, '{!s}')'''.format(
         config.admin_id, config.admin_name)
     cursor.execute(sql)
-    sql = '''INSERT OR IGNORE INTO admins (uid, name) VALUES (259056624, "Yuriy")'''
+    sql = '''INSERT OR IGNORE INTO admins (uid, name)  VALUES (259056624, "Yuriy")'''
     cursor.execute(sql)
+    sql = '''INSERT OR IGNORE INTO msgs (first_msg, mail_request, number_request) VALUES (?, ?, ?)'''
+    cursor.execute(sql, (cnst.MSG_WELCOME_FOLLOWER, cnst.MSG_ACCEPT_EMAIL, cnst.MSG_ACCEPT_NUMBER))
     connection.commit()
 
 
@@ -324,3 +333,63 @@ def update_quest(quest, answs, id):
         sql = '''UPDATE quest_msg SET quest=?, answs=? WHERE id=?'''
         cursor.execute(sql, (quest, answs, id))
         connection.commit()
+
+
+def get_first_msg():
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''SELECT first_msg FROM msgs'''
+        res = cursor.execute(sql).fetchone()
+        print(res)
+        return res
+
+
+def update_first_msg(first_msg):
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''UPDATE msgs SET first_msg=?'''
+        res = cursor.execute(sql, (first_msg,))
+        connection.commit()
+        print(res)
+
+
+def get_mail_quest():
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''SELECT mail_request FROM msgs'''
+        res = cursor.execute(sql).fetchone()
+        print(res)
+        return res
+
+
+def update_mail_quest(mail_quest):
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''UPDATE msgs SET mail_request=?'''
+        res = cursor.execute(sql, (mail_quest,))
+        connection.commit()
+        print(res)
+
+
+def get_number_quest():
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''SELECT number_request FROM msgs'''
+        res = cursor.execute(sql).fetchone()
+        print(res)
+        return res
+
+
+def update_number_quest(number_quest):
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''UPDATE msgs SET number_request=?'''
+        res = cursor.execute(sql, (number_quest,))
+        connection.commit()
+        print(res)
+
+
+        # first_msg
+        # mail_request
+        # number_request
+

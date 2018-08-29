@@ -64,7 +64,25 @@ def admin_message_processing(uid, uname, text):
         IN_ADMIN_PANEL[uid] = m.QuestMsg()
         msg = utils.get_quest_msgs_as_str()
         mt.send_message(uid, msg)
-        mt.send_message(uid, cnst.MSG_ACCEPT_QUEST_MSG, cnst.KEYBOARD_CANCEL)
+        mt.send_message(uid, cnst.MSG_ACCEPT_QUEST_MSG, cnst.KEYBOARD_CANCEL_AND_MSG_EDIT)
+
+    elif text == cnst.BTN_FIRST_MSG_EDIT:
+        IN_ADMIN_PANEL[uid] = cnst.BTN_FIRST_MSG_EDIT
+        msg = db.get_first_msg()
+        msg += "\n\n Отправьте новое приветственное сообщение для замены. Используйте {} для обращения к пользователю."
+        mt.send_message(uid, msg, keyboard=cnst.KEYBOARD_CANCEL)
+
+    elif text == cnst.BTN_MAIL_MSG_EDIT:
+        IN_ADMIN_PANEL[uid] = cnst.BTN_MAIL_MSG_EDIT
+        msg = db.get_mail_quest()
+        msg += "\n\n Отправьте новое сообщение запроса email для замены."
+        mt.send_message(uid, msg, keyboard=cnst.KEYBOARD_CANCEL)
+
+    elif text == cnst.BTN_NUMBER_MSG_EDIT:
+        IN_ADMIN_PANEL[uid] = cnst.BTN_NUMBER_MSG_EDIT
+        msg = db.get_mail_quest()
+        msg += "\n\n Отправьте новое сообщение запроса номера для замены."
+        mt.send_message(uid, msg, keyboard=cnst.KEYBOARD_CANCEL)
 
     elif text.lower() == cnst.CMD_PARSE_GROUP:
         if db.is_admin(uid):
@@ -128,6 +146,21 @@ def admin_message_processing(uid, uname, text):
     elif IN_ADMIN_PANEL[uid] == cnst.BTN_BROADCAST:
         mt.emailing_to_all_subs_keyboard(uid, text)
         IN_ADMIN_PANEL.clear()
+        IN_ADMIN_PANEL[uid] = ''
+
+    elif IN_ADMIN_PANEL[uid] == cnst.BTN_FIRST_MSG_EDIT:
+        db.update_first_msg(text)
+        mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
+        IN_ADMIN_PANEL[uid] = ''
+
+    elif IN_ADMIN_PANEL[uid] == cnst.BTN_MAIL_MSG_EDIT:
+        db.update_mail_quest(text)
+        mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
+        IN_ADMIN_PANEL[uid] = ''
+
+    elif IN_ADMIN_PANEL[uid] == cnst.BTN_NUMBER_MSG_EDIT:
+        db.update_number_quest(text)
+        mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
         IN_ADMIN_PANEL[uid] = ''
 
     elif IN_ADMIN_PANEL[uid] == cnst.BTN_ADMINS:
@@ -202,7 +235,8 @@ def message_processing(uid, text):
                 k = cnst.KEYBOARD_CANCEL
             mt.send_message(uid, q.quest, k)
         else:
-            mt.send_message(uid, cnst.MSG_ACCEPT_EMAIL, cnst.KEYBOARD_END_AND_SKIP)
+            msg = db.get_mail_quest()
+            mt.send_message(uid, msg, cnst.KEYBOARD_END_AND_SKIP)
             READY_TO_ENROLL[uid].quests.pop(0)
 
     elif text == cnst.BTN_CANCEL:
@@ -220,7 +254,8 @@ def message_processing(uid, text):
         if len(READY_TO_ENROLL[uid].quests) > 0:
             if len(READY_TO_ENROLL[uid].quests) == 1:
                 READY_TO_ENROLL[uid].answers.append(text)
-                mt.send_message(uid, cnst.MSG_ACCEPT_EMAIL, cnst.KEYBOARD_END_AND_SKIP)
+                msg = db.get_mail_quest()
+                mt.send_message(uid, msg, cnst.KEYBOARD_END_AND_SKIP)
                 READY_TO_ENROLL[uid].quests.pop(0)
             else:
                 k = None
@@ -236,11 +271,13 @@ def message_processing(uid, text):
             READY_TO_ENROLL[uid].set_name(uname)
             if utils.is_email_valid(text):
                 READY_TO_ENROLL[uid].set_email(text)
-                mt.send_message(uid, cnst.MSG_ACCEPT_NUMBER, cnst.KEYBOARD_CANCEL)
+                msg = db.get_number_quest()
+                mt.send_message(uid, msg, cnst.KEYBOARD_CANCEL)
             else:
                 if text == cnst.BTN_SKIP:
                     READY_TO_ENROLL[uid].set_email('')
-                    mt.send_message(uid, cnst.MSG_ACCEPT_NUMBER, cnst.KEYBOARD_CANCEL)
+                    msg = db.get_number_quest()
+                    mt.send_message(uid, msg, cnst.KEYBOARD_CANCEL)
                 else:
                     mt.send_message(uid, cnst.MSG_UNCORECT_EMAIL)
         elif not READY_TO_ENROLL[uid].number_is_sign():
@@ -305,7 +342,8 @@ def group_join(uid):
         db.set_bot_follower_status(uid, cnst.USER_SUB_STATUS)
     else:
         db.add_bot_follower(uid, uname,  msg_allowed=msg_allowed)
-    mt.send_message(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), cnst.KEYBOARD_USER)
+    msg = db.get_first_msg()
+    mt.send_message(uid, msg.format(uname), cnst.KEYBOARD_USER)
     utils.del_uid_from_dict(uid, IN_ADMIN_PANEL)
     utils.del_uid_from_dict(uid, READY_TO_ENROLL)
     utils.del_uid_from_dict(uid, READY_TO_LEAVE)

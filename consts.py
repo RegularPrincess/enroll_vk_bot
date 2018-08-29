@@ -16,6 +16,9 @@ BTN_LEAVE_REASON = 'Причины отписки'
 BTN_QUESTIONS = 'Вопросы пользователю'
 BTN_END = 'Закончить'
 BTN_SKIP = 'Пропустить'
+BTN_FIRST_MSG_EDIT = "Ред-ть приветственное сообщение"
+BTN_MAIL_MSG_EDIT = "Ред-ть запрос email"
+BTN_NUMBER_MSG_EDIT = "Ред-ть запрос номера"
 
 START_WORDS = ['start', 'начать', 'старт',
                'привет', 'привет!', 'привет.',
@@ -162,6 +165,45 @@ KEYBOARD_CANCEL = {
     ]
 }
 
+KEYBOARD_CANCEL_AND_MSG_EDIT = {
+    "one_time": False,
+    "buttons": [
+        [{
+            "action": {
+                "type": "text",
+                "payload": "{\"button\": \"1\"}",
+                "label": BTN_CANCEL
+            },
+            "color": "default"
+        }],
+        [{
+            "action": {
+                "type": "text",
+                "payload": "{\"button\": \"1\"}",
+                "label": BTN_FIRST_MSG_EDIT
+            },
+            "color": "default"
+        }],
+        [{
+            "action": {
+                "type": "text",
+                "payload": "{\"button\": \"1\"}",
+                "label": BTN_MAIL_MSG_EDIT
+            },
+            "color": "default"
+        },
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "{\"button\": \"1\"}",
+                    "label": BTN_NUMBER_MSG_EDIT
+                },
+                "color": "default"
+            }
+        ]
+    ]
+}
+
 MSG_ADMIN_PANEL = '''🔥 ПАНЕЛЬ АДМИНИСТРАТОРА 🔥'''
 
 KEYBOARD_END_AND_CANCELE = {
@@ -283,13 +325,13 @@ KEYBOARD_ADMIN = {
             },
             "color": "default"
         }]]
-            # {
-            #     "action": {
-            #         "type": "text",
-            #         "payload": "{\"button\": \"5\"}",
-            #         "label": MSG_ADMIN_EXIT
-            #     },
-            #     "color": "default"
-            # }]
+    # {
+    #     "action": {
+    #         "type": "text",
+    #         "payload": "{\"button\": \"5\"}",
+    #         "label": MSG_ADMIN_EXIT
+    #     },
+    #     "color": "default"
+    # }]
     # ]
 }

@@ -219,7 +219,8 @@ def isint(s):
 def send_welcome_msg(uid, uname, keyboard):
     if uname is None:
         uname = vk.get_user_name(uid)
-    vk.send_message_keyboard(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), keyboard)
+    msg = db.get_first_msg()
+    vk.send_message_keyboard(uid, msg.format(uname), keyboard)
 
 
 def emailing_to_all_subs_keyboard(uid, text):
