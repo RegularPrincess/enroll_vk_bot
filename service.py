@@ -80,7 +80,7 @@ def admin_message_processing(uid, uname, text):
 
     elif text == cnst.BTN_NUMBER_MSG_EDIT:
         IN_ADMIN_PANEL[uid] = cnst.BTN_NUMBER_MSG_EDIT
-        msg = db.get_mail_quest()
+        msg = db.get_number_quest()
         msg += "\n\n Отправьте новое сообщение запроса номера для замены."
         mt.send_message(uid, msg, keyboard=cnst.KEYBOARD_CANCEL)
 
