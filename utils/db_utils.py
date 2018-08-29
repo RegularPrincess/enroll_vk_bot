@@ -341,7 +341,7 @@ def get_first_msg():
         sql = '''SELECT first_msg FROM msgs'''
         res = cursor.execute(sql).fetchone()
         print(res)
-        return res
+        return res[0]
 
 
 def update_first_msg(first_msg):
@@ -359,7 +359,7 @@ def get_mail_quest():
         sql = '''SELECT mail_request FROM msgs'''
         res = cursor.execute(sql).fetchone()
         print(res)
-        return res
+        return res[0]
 
 
 def update_mail_quest(mail_quest):
@@ -377,7 +377,7 @@ def get_number_quest():
         sql = '''SELECT number_request FROM msgs'''
         res = cursor.execute(sql).fetchone()
         print(res)
-        return res
+        return res[0]
 
 
 def update_number_quest(number_quest):
