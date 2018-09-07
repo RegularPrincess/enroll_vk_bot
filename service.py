@@ -208,7 +208,7 @@ def admin_message_processing(uid, uname, text):
 def message_processing(uid, text):
     uname = db.get_follower_name(uid)
     if uname is None:
-        mt.new_user_or_not(uid, uname)
+        mt.new_user_or_not(uid, uname, send_welcome=True)
     if uid in IN_ADMIN_PANEL:
         admin_message_processing(uid, uname, text)
         return 'ok'
