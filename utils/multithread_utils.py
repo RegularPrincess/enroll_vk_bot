@@ -165,14 +165,17 @@ class ThreadSendMsg(Thread):
 
 
 class ThreadNewUserOrNote(Thread):
-    def __init__(self, uid, uname):
+    def __init__(self, uid, uname, send_welcome=False):
         """Инициализация потока"""
         Thread.__init__(self)
         self.uid = uid
         self.uname = uname
+        self.send_welcome = send_welcome
 
     def run(self):
-        us.new_user_or_not(self.uid, self.uname)
+        new = us.new_user_or_not(self.uid, self.uname)
+        if new and self.send_welcome:
+            send_msg_welcome(self.uid, self.uname, cnst.KEYBOARD_USER)
 
 
 class ThreadEmailingToAllSubs(Thread):
@@ -213,8 +216,8 @@ def send_message(uid, msg, keyboard=None):
     t.start()
 
 
-def new_user_or_not(uid, uname):
-    t = ThreadNewUserOrNote(uid, uname)
+def new_user_or_not(uid, uname, send_welcome=False):
+    t = ThreadNewUserOrNote(uid, uname, send_welcome)
     t.start()
 
 

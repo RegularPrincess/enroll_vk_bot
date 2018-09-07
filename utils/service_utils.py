@@ -114,6 +114,7 @@ def new_user_or_not(uid, uname):
     else:
         db.add_bot_follower(uid, uname, status=cnst.USER_NOT_SUB_STATUS, msg_allowed=1)
         # vk.send_message_keyboard(uid, cnst.MSG_WELCOME_FOLLOWER.format(uname), cnst.KEYBOARD_USER)
+    return not e
 
 
 def parse_bcst(text):

@@ -309,8 +309,7 @@ def message_processing(uid, text):
     elif text.lower() == "clearme":
         mt.send_message(uid, "clear", keyboard=cnst.EMPTY_KEYBOARD)
     else:
-        thread = mt.ThreadNewUserOrNote(uid, uname)
-        thread.start()
+        mt.new_user_or_not(uid, uname, send_welcome=True)
         # mt.send_msg_welcome(uid, uname, cnst.KEYBOARD_USER)
         # mt.send_message(uid, cnst.MSG_DEFAULT_ANSWER)
     return 'ok'
