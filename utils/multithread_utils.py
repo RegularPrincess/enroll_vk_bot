@@ -240,8 +240,6 @@ class _ThreadSendDataByTimeout(Thread):
 class ThreadSendDataByTimeout:
     def __init__(self, info, uid):
         self.proc = _ThreadSendDataByTimeout(info, uid)
-
-    def run(self):
         self.proc.start()
 
     def update(self):
