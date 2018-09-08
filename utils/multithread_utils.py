@@ -218,12 +218,16 @@ class _ThreadSendDataByTimeout(Thread):
         Thread.__init__(self)
         self.info = info
         self.uid = uid
+        self._time = 30
         self._stop_event = Event()
 
     def run(self):
-        time.sleep(30)
-        us.send_message_admins(self.info)
-        us.send_data_to_uon(self.info, self.uid)
+        while self._time > 0:
+            time.sleep(2)
+            self._time -= 2
+        if not self._stop_event.isSet():
+            us.send_message_admins(self.info)
+            us.send_data_to_uon(self.info, self.uid)
 
     def stop(self):
         self._stop_event.set()
@@ -239,11 +243,8 @@ class ThreadSendDataByTimeout:
     def run(self):
         self.proc.start()
 
-    def update(self, info):
-        self.proc.stop()
-        self.proc.info = info
-        self.proc = _ThreadSendDataByTimeout(info, self.proc.uid)
-        self.proc.start()
+    def update(self):
+        self.proc._time = 30
 
     def stop(self):
         self.proc.stop()
