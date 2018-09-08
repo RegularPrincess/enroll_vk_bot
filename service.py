@@ -296,7 +296,7 @@ def message_processing(uid, text):
             else:
                 mt.send_message(uid, cnst.MSG_UNCORECT_NUMBER)
         if uid in TIMEOUT_THREADS and uid in READY_TO_ENROLL:
-            TIMEOUT_THREADS[uid].update(READY_TO_ENROLL[uid])
+            TIMEOUT_THREADS[uid].update()
         else:
             TIMEOUT_THREADS[uid] = mt.ThreadSendDataByTimeout(READY_TO_ENROLL[uid], uid)
 
