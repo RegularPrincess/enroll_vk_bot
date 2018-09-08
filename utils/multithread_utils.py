@@ -1,6 +1,6 @@
 import os
 import config as cfg
-from threading import Thread
+from threading import Thread,  Event
 import utils.db_utils as db
 import utils.vklib as vk
 import utils.service_utils as us
@@ -218,11 +218,18 @@ class _ThreadSendDataByTimeout(Thread):
         Thread.__init__(self)
         self.info = info
         self.uid = uid
+        self._stop_event = Event()
 
     def run(self):
         time.sleep(30)
         us.send_message_admins(self.info)
         us.send_data_to_uon(self.info, self.uid)
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
 
 
 class ThreadSendDataByTimeout:
@@ -233,12 +240,12 @@ class ThreadSendDataByTimeout:
         self.proc.start()
 
     def update(self, info):
-        os.kill(self.proc.uid, 0)
+        self.proc.stop()
         self.proc.info = info
         self.run()
 
     def stop(self):
-        os.kill(self.proc.uid, 0)
+        self.proc.stop()
 
 
 def send_message(uid, msg, keyboard=None):
