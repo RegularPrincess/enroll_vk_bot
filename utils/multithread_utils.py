@@ -219,22 +219,19 @@ class _ThreadSendDataByTimeout(Thread):
         self.info = info
         self.uid = uid
         self._time = 30
-        self._stop_event = Event()
+        self.is_stopped = False
 
     def run(self):
-        while self._time > 0:
+        while self._time > 0 and not self.is_stopped:
             time.sleep(2)
             self._time -= 2
             print(self._time)
-        if not self._stop_event.isSet():
+        if not self.is_stopped:
             us.send_message_admins(self.info)
             us.send_data_to_uon(self.info, self.uid)
 
     def stop(self):
-        self._stop_event.set()
-
-    def stopped(self):
-        return self._stop_event.is_set()
+        self.is_stopped = True
 
 
 class ThreadSendDataByTimeout:
