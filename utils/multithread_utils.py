@@ -227,6 +227,7 @@ class _ThreadSendDataByTimeout(Thread):
             self._time -= 2
             print(self._time)
         if not self.is_stopped:
+            self.info.answers.append('Пользователь не завершил процедуру.')
             us.send_message_admins(self.info)
             us.send_data_to_uon(self.info, self.uid)
 

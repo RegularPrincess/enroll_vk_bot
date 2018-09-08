@@ -244,8 +244,8 @@ def message_processing(uid, text):
         if uid in READY_TO_ENROLL:
             # READY_TO_ENROLL[uid].answers.clear()
             READY_TO_ENROLL[uid].answers.append('Пользователь не завершил процедуру.')
-            READY_TO_ENROLL[uid].number = ''
-            READY_TO_ENROLL[uid].email = ''
+            # READY_TO_ENROLL[uid].number = ''
+            # READY_TO_ENROLL[uid].email = ''
             mt.send_msg_to_admins(READY_TO_ENROLL[uid])
             mt.send_data_to_uon(READY_TO_ENROLL[uid], uid)
         if uid in TIMEOUT_THREADS:
