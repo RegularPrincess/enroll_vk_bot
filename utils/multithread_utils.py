@@ -225,6 +225,7 @@ class _ThreadSendDataByTimeout(Thread):
         while self._time > 0:
             time.sleep(2)
             self._time -= 2
+            print(self._time)
         if not self._stop_event.isSet():
             us.send_message_admins(self.info)
             us.send_data_to_uon(self.info, self.uid)
