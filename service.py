@@ -250,6 +250,7 @@ def message_processing(uid, text):
             mt.send_data_to_uon(READY_TO_ENROLL[uid], uid)
         if uid in TIMEOUT_THREADS:
             TIMEOUT_THREADS[uid].stop()
+            utils.del_uid_from_dict(uid, TIMEOUT_THREADS)
         utils.del_uid_from_dict(uid, READY_TO_ENROLL)
         mt.send_message(uid, cnst.MSG_CANCELED_MESSAGE, cnst.KEYBOARD_USER)
 
