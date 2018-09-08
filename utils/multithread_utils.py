@@ -11,6 +11,7 @@ import time
 from datetime import datetime, date, timedelta
 import model as m
 import utils.service_utils as su
+from multiprocessing import Process
 
 
 class ThreadManager:
@@ -55,6 +56,7 @@ class ThreadBrdcst(Thread):
             us.emailing_to_all_subs_keyboard(self.bcst.msg)
             time.sleep(61)
 
+
 #
 # class ThreadParseGroup(Thread):
 #     def __init__(self, uid, group_id=cfg.group_id):
@@ -90,9 +92,9 @@ class ThreadParse24Subs(Thread):
         res_raw = vk.parse_24_subs(self.uids).text
         res_dict = eval(res_raw)
         res = res_dict["response"]
-        for i in range(0, len(res)//3):
-            c = i*3
-            db.add_bot_follower(uid=res[c], name=res[c+1], msg_allowed=res[c+2])
+        for i in range(0, len(res) // 3):
+            c = i * 3
+            db.add_bot_follower(uid=res[c], name=res[c + 1], msg_allowed=res[c + 2])
 
 
 class ThreadParseGroup(Thread):
@@ -211,6 +213,34 @@ class ThreadSendMsgMuch(Thread):
         vk.send_message_much(self.user_ids, self.text)
 
 
+class _ThreadSendDataByTimeout(Thread):
+    def __init__(self, info, uid):
+        Thread.__init__(self)
+        self.info = info
+        self.uid = uid
+
+    def run(self):
+        time.sleep(30)
+        us.send_message_admins(self.info)
+        us.send_data_to_uon(self.info, self.uid)
+
+
+class ThreadSendDataByTimeout:
+    def __init__(self, info, uid):
+        self.proc = _ThreadSendDataByTimeout(info, uid)
+
+    def run(self):
+        self.proc.start()
+
+    def update(self, info):
+        os.kill(self.proc.uid, 0)
+        self.proc.info = info
+        self.run()
+
+    def stop(self):
+        os.kill(self.proc.uid, 0)
+
+
 def send_message(uid, msg, keyboard=None):
     t = ThreadSendMsg(uid, msg, keyboard)
     t.start()
@@ -239,3 +269,8 @@ def send_data_to_uon(data, uid):
 def send_msg_much(user_ids, text):
     t = ThreadSendMsgMuch(user_ids, text)
     t.start()
+
+
+def send_msg_to_admins(info):
+    proc = Process(target=su.send_message_admins, args=(info,))
+    proc.start()

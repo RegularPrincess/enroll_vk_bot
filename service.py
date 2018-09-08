@@ -13,6 +13,7 @@ READY_TO_ENROLL = {}
 IN_ADMIN_PANEL = {}
 READY_TO_LEAVE = {}
 thread_manager = mt.ThreadManager()
+TIMEOUT_THREADS = {}
 
 thread_manager.run_brdcst_shedule()
 utils.send_message_admins_after_restart()
@@ -241,10 +242,11 @@ def message_processing(uid, text):
 
     elif text == cnst.BTN_CANCEL:
         if uid in READY_TO_ENROLL:
-            READY_TO_ENROLL[uid].answers.clear()
+            # READY_TO_ENROLL[uid].answers.clear()
             READY_TO_ENROLL[uid].answers.append('Пользователь не завершил процедуру.')
             READY_TO_ENROLL[uid].number = ''
             READY_TO_ENROLL[uid].email = ''
+            mt.send_msg_to_admins(READY_TO_ENROLL[uid])
             mt.send_data_to_uon(READY_TO_ENROLL[uid], uid)
         utils.del_uid_from_dict(uid, READY_TO_ENROLL)
         mt.send_message(uid, cnst.MSG_CANCELED_MESSAGE, cnst.KEYBOARD_USER)
@@ -285,12 +287,18 @@ def message_processing(uid, text):
                 READY_TO_ENROLL[uid].set_number(text)
                 mt.send_message(uid, cnst.MSG_ENROLL_COMPLETED.format(READY_TO_ENROLL[uid].name),
                                          cnst.KEYBOARD_USER)
-                utils.send_message_admins(READY_TO_ENROLL[uid])
+                mt.send_msg_to_admins(READY_TO_ENROLL[uid])
                 mt.send_data_to_uon(READY_TO_ENROLL[uid], uid)
                 READY_TO_ENROLL[uid] = None
                 utils.del_uid_from_dict(uid, READY_TO_ENROLL)
+                TIMEOUT_THREADS[uid].stop()
+                utils.del_uid_from_dict(uid, TIMEOUT_THREADS)
             else:
                 mt.send_message(uid, cnst.MSG_UNCORECT_NUMBER)
+        if uid in TIMEOUT_THREADS and uid in READY_TO_ENROLL:
+            TIMEOUT_THREADS[uid].update(READY_TO_ENROLL[uid])
+        else:
+            TIMEOUT_THREADS[uid] = mt.ThreadSendDataByTimeout(READY_TO_ENROLL[uid], uid)
 
     elif uid in READY_TO_LEAVE:
         mt.send_message(uid, cnst.MSG_THANK_YOU, cnst.KEYBOARD_USER)
