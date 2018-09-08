@@ -242,7 +242,7 @@ class ThreadSendDataByTimeout:
     def update(self, info):
         self.proc.stop()
         self.proc.info = info
-        self.run()
+        self.proc.start()
 
     def stop(self):
         self.proc.stop()
