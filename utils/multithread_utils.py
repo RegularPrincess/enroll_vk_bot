@@ -218,7 +218,7 @@ class _ThreadSendDataByTimeout(Thread):
         Thread.__init__(self)
         self.info = info
         self.uid = uid
-        self._time = 30
+        self._time = 900
         self.is_stopped = False
 
     def run(self):
@@ -241,7 +241,7 @@ class ThreadSendDataByTimeout:
         self.proc.start()
 
     def update(self):
-        self.proc._time = 30
+        self.proc._time = 900
 
     def stop(self):
         self.proc.stop()
