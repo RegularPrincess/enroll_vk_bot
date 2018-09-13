@@ -364,6 +364,7 @@ def message_allow(uid):
     db.set_bot_follower_mess_allowed(uid, 1)
     uname = vk.get_user_name(uid)
     mt.new_user_or_not(uid, uname)
+    mt.send_msg_welcome(uid, uname, cnst.KEYBOARD_USER)
     return 'ok'
 
 
