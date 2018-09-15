@@ -220,7 +220,7 @@ def message_processing(uid, text):
         thread = mt.ThreadNewUserOrNote(uid, uname)
         thread.start()
 
-    elif text.lower() in cnst.BTN_ENROLL.lower() or (text.lower() in cnst.USER_ACCEPT_WORDS and not_ready_to_enroll(uid)):
+    elif cnst.BTN_ENROLL.lower() in text.lower() or (text.lower() in cnst.USER_ACCEPT_WORDS and not_ready_to_enroll(uid)):
         READY_TO_ENROLL[uid] = m.EnrollInfo(uid)
         quests = db.get_quest_msgs()
         quests.append('FAKE')
