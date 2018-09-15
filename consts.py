@@ -3,7 +3,7 @@
 # Кнопки
 import model as m
 
-BTN_ENROLL = "Подобрать тур!"
+BTN_ENROLL = "Подобрать тур"
 BTN_CANCEL = "⛔ Отмена"
 BTN_BROADCAST = "Рассылка"
 BTN_ADD_ADMIN = "Добавить администратора"
