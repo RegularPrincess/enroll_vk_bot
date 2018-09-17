@@ -234,10 +234,10 @@ def message_processing(uid, text):
                 k = utils.get_keyboard_from_list(answrs, cnst.cancel_btn)
             else:
                 k = cnst.KEYBOARD_CANCEL
-            mt.send_message(uid, q.quest, k)
+            mt.send_message(uid, q.quest.format(READY_TO_ENROLL[uid].name), k)
         else:
             msg = db.get_mail_quest()
-            mt.send_message(uid, msg, cnst.KEYBOARD_END_AND_SKIP)
+            mt.send_message(uid, msg.format(READY_TO_ENROLL[uid].name), cnst.KEYBOARD_END_AND_SKIP)
             READY_TO_ENROLL[uid].quests.pop(0)
 
     elif text == cnst.BTN_CANCEL:
@@ -260,7 +260,7 @@ def message_processing(uid, text):
             if len(READY_TO_ENROLL[uid].quests) == 1:
                 READY_TO_ENROLL[uid].answers.append(text)
                 msg = db.get_mail_quest()
-                mt.send_message(uid, msg, cnst.KEYBOARD_END_AND_SKIP)
+                mt.send_message(uid, msg.format(READY_TO_ENROLL[uid].name), cnst.KEYBOARD_END_AND_SKIP)
                 READY_TO_ENROLL[uid].quests.pop(0)
             else:
                 k = None
@@ -271,7 +271,7 @@ def message_processing(uid, text):
                     k = utils.get_keyboard_from_list(answrs, cnst.cancel_btn)
                 else:
                     k = cnst.KEYBOARD_CANCEL
-                mt.send_message(uid, q.quest, k)
+                mt.send_message(uid, q.quest.format(READY_TO_ENROLL[uid].name), k)
         elif not READY_TO_ENROLL[uid].email_is_sign():
             READY_TO_ENROLL[uid].set_name(uname)
             if utils.is_email_valid(text):
@@ -282,7 +282,7 @@ def message_processing(uid, text):
                 if text == cnst.BTN_SKIP:
                     READY_TO_ENROLL[uid].set_email('')
                     msg = db.get_number_quest()
-                    mt.send_message(uid, msg, cnst.KEYBOARD_CANCEL)
+                    mt.send_message(uid, msg.format(READY_TO_ENROLL[uid].name), cnst.KEYBOARD_CANCEL)
                 else:
                     mt.send_message(uid, cnst.MSG_UNCORECT_EMAIL)
         elif not READY_TO_ENROLL[uid].number_is_sign():
