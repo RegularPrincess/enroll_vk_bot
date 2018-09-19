@@ -22,7 +22,7 @@ utils.send_message_admins_after_restart()
 def admin_message_processing(uid, uname, text):
     if text == cnst.MSG_ADMIN_EXIT:
         utils.del_uid_from_dict(uid, IN_ADMIN_PANEL)
-        mt.send_msg_welcome(uid, uname, cnst.KEYBOARD_USER)
+        mt.send_msg_welcome(uid, uname, utils.get_user_keyboard())
 
     elif text == cnst.BTN_BROADCAST:
         IN_ADMIN_PANEL[uid] = cnst.BTN_BROADCAST
@@ -103,7 +103,7 @@ def admin_message_processing(uid, uname, text):
             pg = mt.ThreadParseGroup(uid)
             pg.start()
         else:
-            mt.send_message(uid, cnst.MSG_YOU_NOT_ADMIN, cnst.KEYBOARD_USER)
+            mt.send_message(uid, cnst.MSG_YOU_NOT_ADMIN, utils.get_user_keyboard())
 
     elif text == cnst.BTN_LEAVE_REASON:
         IN_ADMIN_PANEL[uid] = cnst.BTN_LEAVE_REASON
@@ -242,7 +242,7 @@ def message_processing(uid, text):
         return 'ok'
 
     if text.lower() in cnst.START_WORDS and not_ready_to_enroll(uid):
-        thread = mt.ThreadSendMsgWelcome(uid, uname, cnst.KEYBOARD_USER)
+        thread = mt.ThreadSendMsgWelcome(uid, uname, utils.get_user_keyboard())
         thread.start()
         thread = mt.ThreadNewUserOrNote(uid, uname)
         thread.start()
@@ -279,7 +279,7 @@ def message_processing(uid, text):
             TIMEOUT_THREADS[uid].stop()
             utils.del_uid_from_dict(uid, TIMEOUT_THREADS)
         utils.del_uid_from_dict(uid, READY_TO_ENROLL)
-        mt.send_message(uid, cnst.MSG_CANCELED_MESSAGE, cnst.KEYBOARD_USER)
+        mt.send_message(uid, cnst.MSG_CANCELED_MESSAGE, utils.get_user_keyboard())
 
     # Обработка ввода данных пользователя
     elif uid in READY_TO_ENROLL:
@@ -316,7 +316,7 @@ def message_processing(uid, text):
             if utils.is_number_valid(text):
                 READY_TO_ENROLL[uid].set_number(text)
                 mt.send_message(uid, cnst.MSG_ENROLL_COMPLETED.format(READY_TO_ENROLL[uid].name),
-                                         cnst.KEYBOARD_USER)
+                                utils.get_user_keyboard())
                 mt.send_msg_to_admins(READY_TO_ENROLL[uid])
                 mt.send_data_to_uon(READY_TO_ENROLL[uid], uid)
                 READY_TO_ENROLL[uid] = None
@@ -331,7 +331,7 @@ def message_processing(uid, text):
             TIMEOUT_THREADS[uid] = mt.ThreadSendDataByTimeout(READY_TO_ENROLL[uid], uid)
 
     elif uid in READY_TO_LEAVE:
-        mt.send_message(uid, cnst.MSG_THANK_YOU, cnst.KEYBOARD_USER)
+        mt.send_message(uid, cnst.MSG_THANK_YOU, utils.get_user_keyboard())
         mt.send_message(uid, cnst.GROUP_LEAVE_MESSAGE.format(uname))
         admins = db.get_list_bot_admins()
         mt.send_msg_much(admins, cnst.MSG_USER_LEAVED.format(uname, uid, text))
@@ -343,7 +343,7 @@ def message_processing(uid, text):
             IN_ADMIN_PANEL[uid] = ''
             mt.send_message(uid, cnst.MSG_ADMIN_PANEL, cnst.KEYBOARD_ADMIN)
         else:
-            mt.send_message(uid, cnst.MSG_YOU_NOT_ADMIN, cnst.KEYBOARD_USER)
+            mt.send_message(uid, cnst.MSG_YOU_NOT_ADMIN, utils.get_user_keyboard())
     elif text.lower() == "clearme":
         mt.send_message(uid, "clear", keyboard=cnst.EMPTY_KEYBOARD)
     else:
@@ -380,7 +380,7 @@ def group_join(uid):
     else:
         db.add_bot_follower(uid, uname,  msg_allowed=msg_allowed)
     msg = db.get_first_msg()
-    mt.send_message(uid, msg.format(uname), cnst.KEYBOARD_USER)
+    mt.send_message(uid, msg.format(uname), utils.get_user_keyboard())
     utils.del_uid_from_dict(uid, IN_ADMIN_PANEL)
     utils.del_uid_from_dict(uid, READY_TO_ENROLL)
     utils.del_uid_from_dict(uid, READY_TO_LEAVE)
@@ -391,13 +391,11 @@ def message_allow(uid):
     db.set_bot_follower_mess_allowed(uid, 1)
     uname = vk.get_user_name(uid)
     mt.new_user_or_not(uid, uname)
-    mt.send_msg_welcome(uid, uname, cnst.KEYBOARD_USER)
+    mt.send_msg_welcome(uid, uname, utils.get_user_keyboard())
     return 'ok'
 
 
 def message_deny(uid):
     db.set_bot_follower_mess_allowed(uid, 0)
     return 'ok'
-#
-# pg = mt.ThreadParseGroup(cfg.admin_id)
-# pg.start()
+

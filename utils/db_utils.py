@@ -437,5 +437,5 @@ def update_color_btn(color_btn):
 def init_cnsts():
     cnst.BTN_ENROLL = get_first_btn()
     cnst.COLOR_BTN = get_color_btn()
-    print(cnst.BTN_ENROLL + "_________--------------")
+    print(cnst.BTN_ENROLL + "_________--------------" + cnst.COLOR_BTN)
 init_cnsts()

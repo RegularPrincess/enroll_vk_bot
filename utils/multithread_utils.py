@@ -177,7 +177,7 @@ class ThreadNewUserOrNote(Thread):
     def run(self):
         new = us.new_user_or_not(self.uid, self.uname)
         if new and self.send_welcome:
-            send_msg_welcome(self.uid, self.uname, cnst.KEYBOARD_USER)
+            send_msg_welcome(self.uid, self.uname, us.get_user_keyboard())
 
 
 class ThreadEmailingToAllSubs(Thread):

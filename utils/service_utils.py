@@ -14,6 +14,21 @@ import consts as cnst
 import config as cfg
 
 
+def get_user_keyboard():
+    k = cnst.KEYBOARD_USER
+    k["buttons"][0][0]["action"]["label"] = db.get_first_btn()
+    k["buttons"][0][0]["color"] = db.get_color_btn()
+    return k
+
+
+def get_user_enroll_btn():
+    k = cnst.enroll_btn
+    k[0]["action"]["label"] = db.get_first_btn()
+    k[0]["color"] = db.get_color_btn()
+    return k
+
+
+
 class id_wrapper:
     def __init__(self):
         self.questions = db.get_quest_msgs()
@@ -86,7 +101,7 @@ def send_message_admins(info):
 
 def send_message_admins_after_restart():
     admins = db.get_list_bot_admins()
-    vk.send_message_much_keyboard(admins, cnst.MSG_SERVER_RESTARTED, cnst.KEYBOARD_USER)
+    vk.send_message_much_keyboard(admins, cnst.MSG_SERVER_RESTARTED, get_user_keyboard())
 
 
 def is_number_valid(number):
@@ -144,7 +159,7 @@ def save_leave_reasons(reasons_str):
     return len(reasons)
 
 
-def get_keyboard_from_list(list, def_btn=cnst.enroll_btn):
+def get_keyboard_from_list(list, def_btn=get_user_enroll_btn()):
     keyboard = copy.deepcopy(cnst.keyboard_pattern.copy())
     c = 0
     for i in list:
@@ -236,8 +251,9 @@ def emailing_to_all_subs_keyboard(uid, text):
             arr.append(u.uid)
             count += 1
         if len(arr) == 100:
-            vk.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
+            vk.send_message_much_keyboard(arr, text, get_user_keyboard())
             arr = []
-    vk.send_message_much_keyboard(arr, text, cnst.KEYBOARD_USER)
+    vk.send_message_much_keyboard(arr, text, get_user_keyboard())
     vk.send_message_keyboard(uid, cnst.MSG_BROADCAST_COMPLETED.format(count), cnst.KEYBOARD_ADMIN)
     return count
+
