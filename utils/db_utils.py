@@ -41,11 +41,16 @@ with sqlite3.connect(config.db_name) as connection:
                     quest TEXT NOT NULL,
                     answs TEXT NOT NULL)'''
     cursor.execute(sql)
+
+    cursor.execute('DROP TABLE IF EXISTS msgs')
+
     sql = '''CREATE TABLE IF NOT EXISTS msgs (
            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
            first_msg TEXT NOT NULL UNIQUE,
            mail_request TEXT NOT NULL,
            number_request TEXT NOT NULL,
+           first_btn TEXT NOT NULL,
+           color_btn TEXT NOT NULL,
            uniq INTEGER DEFAULT 0 UNIQUE)'''
     cursor.execute(sql)
     sql = '''CREATE INDEX IF NOT EXISTS uid_known_users ON known_users (uid)'''
@@ -56,8 +61,10 @@ with sqlite3.connect(config.db_name) as connection:
     cursor.execute(sql)
     sql = '''INSERT OR IGNORE INTO admins (uid, name)  VALUES (259056624, "Yuriy")'''
     cursor.execute(sql)
-    sql = '''INSERT OR IGNORE INTO msgs (first_msg, mail_request, number_request) VALUES (?, ?, ?)'''
-    cursor.execute(sql, (cnst.MSG_WELCOME_FOLLOWER, cnst.MSG_ACCEPT_EMAIL, cnst.MSG_ACCEPT_NUMBER))
+    sql = '''INSERT OR IGNORE INTO msgs (first_msg, mail_request, number_request, first_btn, color_btn) 
+            VALUES (?, ?, ?, ?, ?)'''
+    cursor.execute(sql, (cnst.MSG_WELCOME_FOLLOWER, cnst.MSG_ACCEPT_EMAIL,
+                         cnst.MSG_ACCEPT_NUMBER, cnst.BTN_ENROLL,  "positive"))
     connection.commit()
 
 
@@ -389,7 +396,37 @@ def update_number_quest(number_quest):
         print(res)
 
 
-        # first_msg
-        # mail_request
-        # number_request
+def get_first_btn():
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''SELECT first_btn FROM msgs'''
+        res = cursor.execute(sql).fetchone()
+        print(res)
+        return res[0]
 
+
+def update_first_btn(first_btn):
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''UPDATE msgs SET first_btn=?'''
+        res = cursor.execute(sql, (first_btn,))
+        connection.commit()
+        print(res)
+
+
+def get_color_btn():
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''SELECT color_btn FROM msgs'''
+        res = cursor.execute(sql).fetchone()
+        print(res)
+        return res[0]
+
+
+def update_color_btn(color_btn):
+    with sqlite3.connect(config.db_name) as connection:
+        cursor = connection.cursor()
+        sql = '''UPDATE msgs SET color_btn=?'''
+        res = cursor.execute(sql, (color_btn,))
+        connection.commit()
+        print(res)

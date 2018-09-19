@@ -19,6 +19,13 @@ BTN_SKIP = 'Пропустить'
 BTN_FIRST_MSG_EDIT = "Ред-ть приветственное сообщение"
 BTN_MAIL_MSG_EDIT = "Ред-ть запрос email"
 BTN_NUMBER_MSG_EDIT = "Ред-ть запрос номера"
+BTN_FIRST_BTN_EDIT = "Ред-ть текст кнопки"
+BTN_COLOR_BTN_EDIT = 'Ред-ть цвет кнопки'
+
+BTN_COLORS_MAP = {"Синий": "primary",
+                  "Белый": "default",
+                  "Красный": "negative ",
+                  "Зеленый": "positive"}
 
 START_WORDS = ['start', 'начать', 'старт',
                'привет', 'привет!', 'привет.',
@@ -198,6 +205,23 @@ KEYBOARD_CANCEL_AND_MSG_EDIT = {
                     "type": "text",
                     "payload": "{\"button\": \"1\"}",
                     "label": BTN_NUMBER_MSG_EDIT
+                },
+                "color": "default"
+            }
+        ],
+[{
+            "action": {
+                "type": "text",
+                "payload": "{\"button\": \"1\"}",
+                "label": BTN_FIRST_BTN_EDIT
+            },
+            "color": "default"
+        },
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "{\"button\": \"1\"}",
+                    "label": BTN_COLOR_BTN_EDIT
                 },
                 "color": "default"
             }

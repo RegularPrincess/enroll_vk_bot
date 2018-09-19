@@ -85,6 +85,19 @@ def admin_message_processing(uid, uname, text):
         msg += "\n\n Отправьте новое сообщение запроса номера для замены."
         mt.send_message(uid, msg, keyboard=cnst.KEYBOARD_CANCEL)
 
+    elif text == cnst.BTN_FIRST_BTN_EDIT:
+        IN_ADMIN_PANEL[uid] = cnst.BTN_FIRST_BTN_EDIT
+        msg = db.get_first_btn()
+        msg += "\n\n Отправьте новый текст кнопки для замены."
+        mt.send_message(uid, msg, keyboard=cnst.KEYBOARD_CANCEL)
+
+    elif text == cnst.BTN_COLOR_BTN_EDIT:
+        IN_ADMIN_PANEL[uid] = cnst.BTN_COLOR_BTN_EDIT
+        msg = db.get_color_btn()
+        msg += "\n\n Выберите новый цвет из предложеных"
+        k = utils.get_keyboard_from_list(cnst.BTN_COLORS_MAP.keys(), cnst.cancel_btn)
+        mt.send_message(uid, msg, k)
+
     elif text.lower() == cnst.CMD_PARSE_GROUP:
         if db.is_admin(uid):
             pg = mt.ThreadParseGroup(uid)
@@ -163,6 +176,20 @@ def admin_message_processing(uid, uname, text):
         db.update_number_quest(text)
         mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
         IN_ADMIN_PANEL[uid] = ''
+
+    elif IN_ADMIN_PANEL[uid] == cnst.BTN_FIRST_BTN_EDIT:
+        db.update_first_btn(text)
+        mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
+        IN_ADMIN_PANEL[uid] = ''
+
+    elif IN_ADMIN_PANEL[uid] == cnst.BTN_COLOR_BTN_EDIT:
+        color = cnst.BTN_COLORS_MAP[text]
+        if color is None:
+            mt.send_message(uid, "Выберите из предложенных")
+        else:
+            db.update_color_btn(text)
+            mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
+            IN_ADMIN_PANEL[uid] = ''
 
     elif IN_ADMIN_PANEL[uid] == cnst.BTN_ADMINS:
         try:
