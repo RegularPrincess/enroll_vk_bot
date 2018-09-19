@@ -188,7 +188,7 @@ def admin_message_processing(uid, uname, text):
         if color is None:
             mt.send_message(uid, "Выберите из предложенных")
         else:
-            db.update_color_btn(text)
+            db.update_color_btn(color)
             mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
             IN_ADMIN_PANEL[uid] = ''
 
