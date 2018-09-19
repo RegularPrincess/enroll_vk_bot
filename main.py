@@ -67,11 +67,10 @@ def processing():
     return 'ok'
 
 
-def main(argv):
+def main():
     print ("Старт")
-    port = int(argv[1])
+    port = int(config.port)
     app.run(host='0.0.0.0', port=port, debug=False)
 
 if __name__ == '__main__':
-    import sys
-    main(sys.argv[0:])
+    main()

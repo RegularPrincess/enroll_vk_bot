@@ -20,9 +20,8 @@ BTN_MAIL_MSG_EDIT = "Ред-ть запрос email"
 BTN_NUMBER_MSG_EDIT = "Ред-ть запрос номера"
 BTN_FIRST_BTN_EDIT = "Ред-ть текст кнопки"
 BTN_COLOR_BTN_EDIT = 'Ред-ть цвет кнопки'
-COLOR_BTN = "positive"
-BTN_ENROLL = "Записаиться на занятие"
-print("ЗАПУСТИЛСЯ CONST " + COLOR_BTN + " ++++++ " + BTN_ENROLL)
+__COLOR_BTN = "positive"
+__BTN_ENROLL = "Записаиться на занятие"
 
 
 BTN_COLORS_MAP = {"Синий": "primary",
@@ -128,9 +127,9 @@ enroll_btn = [{
     "action": {
         "type": "text",
         "payload": "{\"button\": \"1\"}",
-        "label": BTN_ENROLL
+        "label": __BTN_ENROLL
     },
-    "color": COLOR_BTN
+    "color": __COLOR_BTN
 }]
 
 cancel_btn = [{
@@ -155,9 +154,9 @@ KEYBOARD_USER = {
             "action": {
                 "type": "text",
                 "payload": "{\"button\": \"1\"}",
-                "label": BTN_ENROLL
+                "label": __BTN_ENROLL
             },
-            "color": COLOR_BTN
+            "color": __COLOR_BTN
         }],
     ]
 }

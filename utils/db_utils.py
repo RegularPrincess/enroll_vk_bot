@@ -64,7 +64,7 @@ with sqlite3.connect(config.db_name) as connection:
     sql = '''INSERT OR IGNORE INTO msgs (first_msg, mail_request, number_request, first_btn, color_btn) 
             VALUES (?, ?, ?, ?, ?)'''
     cursor.execute(sql, (cnst.MSG_WELCOME_FOLLOWER, cnst.MSG_ACCEPT_EMAIL,
-                         cnst.MSG_ACCEPT_NUMBER, cnst.BTN_ENROLL,  "positive"))
+                         cnst.MSG_ACCEPT_NUMBER, cnst.__BTN_ENROLL, "positive"))
     connection.commit()
 
 
@@ -435,7 +435,7 @@ def update_color_btn(color_btn):
 
 
 def init_cnsts():
-    cnst.BTN_ENROLL = get_first_btn()
-    cnst.COLOR_BTN = get_color_btn()
-    print(cnst.BTN_ENROLL + "_________--------------" + cnst.COLOR_BTN)
+    cnst.__BTN_ENROLL = get_first_btn()
+    cnst.__COLOR_BTN = get_color_btn()
+    print(cnst.__BTN_ENROLL + "_________--------------" + cnst.__COLOR_BTN)
 init_cnsts()
