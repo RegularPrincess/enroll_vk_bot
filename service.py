@@ -5,9 +5,9 @@ import utils.vklib as vk
 import config as cfg
 import consts as cnst
 import model as m
-from utils import db_utils as db
 from utils import service_utils as utils
 import utils.multithread_utils as mt
+from utils import db_utils as db
 
 READY_TO_ENROLL = {}
 IN_ADMIN_PANEL = {}
