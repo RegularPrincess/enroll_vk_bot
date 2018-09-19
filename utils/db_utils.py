@@ -42,7 +42,7 @@ with sqlite3.connect(config.db_name) as connection:
                     answs TEXT NOT NULL)'''
     cursor.execute(sql)
 
-    cursor.execute('DROP TABLE IF EXISTS msgs')
+    # cursor.execute('DROP TABLE IF EXISTS msgs')
 
     sql = '''CREATE TABLE IF NOT EXISTS msgs (
            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -437,4 +437,5 @@ def update_color_btn(color_btn):
 def init_cnsts():
     cnst.BTN_ENROLL = get_first_btn()
     cnst.COLOR_BTN = get_color_btn()
+    print(cnst.BTN_ENROLL + "_________--------------")
 init_cnsts()
