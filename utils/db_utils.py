@@ -42,7 +42,7 @@ with sqlite3.connect(config.db_name) as connection:
                     answs TEXT NOT NULL)'''
     cursor.execute(sql)
 
-    # cursor.execute('DROP TABLE IF EXISTS msgs')
+    cursor.execute('DROP TABLE IF EXISTS msgs')
 
     sql = '''CREATE TABLE IF NOT EXISTS msgs (
            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

@@ -1,30 +1,7 @@
 #!/usr/bin/env python3
 ## -*- coding: utf-8 -*-
+
 # Кнопки
-import sqlite3
-
-import config
-
-
-def get_first_btn():
-    with sqlite3.connect(config.db_name) as connection:
-        cursor = connection.cursor()
-        sql = '''SELECT first_btn FROM msgs'''
-        res = cursor.execute(sql).fetchone()
-        print(res)
-        return res[0]
-
-
-def get_color_btn():
-    with sqlite3.connect(config.db_name) as connection:
-        cursor = connection.cursor()
-        sql = '''SELECT color_btn FROM msgs'''
-        res = cursor.execute(sql).fetchone()
-        print(res)
-        return res[0]
-
-
-
 import model as m
 BTN_CANCEL = "⛔ Отмена"
 BTN_BROADCAST = "Рассылка"
@@ -43,8 +20,8 @@ BTN_MAIL_MSG_EDIT = "Ред-ть запрос email"
 BTN_NUMBER_MSG_EDIT = "Ред-ть запрос номера"
 BTN_FIRST_BTN_EDIT = "Ред-ть текст кнопки"
 BTN_COLOR_BTN_EDIT = 'Ред-ть цвет кнопки'
-COLOR_BTN = get_color_btn()
-BTN_ENROLL = get_first_btn()
+COLOR_BTN = "positive"
+BTN_ENROLL = "Записаиться на занятие"
 
 
 BTN_COLORS_MAP = {"Синий": "primary",
