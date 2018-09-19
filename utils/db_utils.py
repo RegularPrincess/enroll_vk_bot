@@ -68,12 +68,6 @@ with sqlite3.connect(config.db_name) as connection:
     connection.commit()
 
 
-def init_cnsts():
-    cnst.BTN_ENROLL = get_first_btn()
-    cnst.COLOR_BTN = get_color_btn()
-init_cnsts()
-
-
 def get_bot_admins():
     """
     Получить админов бота
@@ -438,3 +432,9 @@ def update_color_btn(color_btn):
         connection.commit()
         init_cnsts()
         print(res)
+
+
+def init_cnsts():
+    cnst.BTN_ENROLL = get_first_btn()
+    cnst.COLOR_BTN = get_color_btn()
+init_cnsts()
