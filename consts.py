@@ -22,6 +22,7 @@ BTN_FIRST_BTN_EDIT = "Ред-ть текст кнопки"
 BTN_COLOR_BTN_EDIT = 'Ред-ть цвет кнопки'
 COLOR_BTN = "positive"
 BTN_ENROLL = "Записаиться на занятие"
+print("ЗАПУСТИЛСЯ CONST " + COLOR_BTN + " ++++++ " + BTN_ENROLL)
 
 
 BTN_COLORS_MAP = {"Синий": "primary",
