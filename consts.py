@@ -21,6 +21,7 @@ BTN_MAIL_MSG_EDIT = "Ред-ть запрос email"
 BTN_NUMBER_MSG_EDIT = "Ред-ть запрос номера"
 BTN_FIRST_BTN_EDIT = "Ред-ть текст кнопки"
 BTN_COLOR_BTN_EDIT = 'Ред-ть цвет кнопки'
+COLOR_BTN = "positive"
 
 BTN_COLORS_MAP = {"Синий": "primary",
                   "Белый": "default",
@@ -127,7 +128,7 @@ enroll_btn = [{
         "payload": "{\"button\": \"1\"}",
         "label": BTN_ENROLL
     },
-    "color": "positive"
+    "color": COLOR_BTN
 }]
 
 cancel_btn = [{
@@ -154,7 +155,7 @@ KEYBOARD_USER = {
                 "payload": "{\"button\": \"1\"}",
                 "label": BTN_ENROLL
             },
-            "color": "positive"
+            "color": COLOR_BTN
         }],
     ]
 }
