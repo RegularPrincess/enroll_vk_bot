@@ -23,6 +23,9 @@ vk_api_url = config.vk_api_url
 
 app = Flask(__name__)
 
+if __name__ == '__main__':
+    app.run()
+
 
 @app.route(rule='/', methods=['GET'])
 def debug():
@@ -66,11 +69,3 @@ def processing():
         return answer
     return 'ok'
 
-
-def main():
-    print ("Старт")
-    port = int(config.port)
-    app.run(host='0.0.0.0', port=port, debug=False)
-
-if __name__ == '__main__':
-    main()

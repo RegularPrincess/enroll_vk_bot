@@ -7,14 +7,15 @@ from sqlalchemy.exc import SQLAlchemyError
 import consts as cnst
 import config
 import model as m
+import os
 
 PER_PAGE = 20
 
-Base = automap_base()
-engine = create_engine("postgresql://postgres:postgres@localhost:5432/heroku")
+DATABASE_URL = os.environ['DATABASE_URL']
+
+engine = create_engine(DATABASE_URL)
 session = Session(engine)
-# reflect the tables
-Base.prepare(engine, reflect=True)
+
 
 
 def is_not_table(table_name):
@@ -152,6 +153,11 @@ sql = '''INSERT INTO msgs (first_msg, mail_request, number_request, first_btn, c
                                                                                           cnst.LAST_MSG)
 result = engine.execute(sql)
 print(result)
+
+
+# reflect the tables
+Base = automap_base()
+Base.prepare(engine, reflect=True)
 
 known_users = Base.classes.known_users
 admins = Base.classes.admins
