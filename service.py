@@ -91,6 +91,12 @@ def admin_message_processing(uid, uname, text):
         msg += "\n\n Отправьте новый текст кнопки для замены."
         mt.send_message(uid, msg, keyboard=cnst.KEYBOARD_CANCEL)
 
+    elif text == cnst.BTN_LAST_MSG_EDIT:
+        IN_ADMIN_PANEL[uid] = cnst.BTN_LAST_MSG_EDIT
+        msg = db.get_last_msg()
+        msg += "\n\n Отправьте новый текст последнего сообщения для замены. ({} - обращение к пользователю)"
+        mt.send_message(uid, msg, keyboard=cnst.KEYBOARD_CANCEL)
+
     elif text == cnst.BTN_COLOR_BTN_EDIT:
         IN_ADMIN_PANEL[uid] = cnst.BTN_COLOR_BTN_EDIT
         msg = db.get_color_btn()
@@ -182,6 +188,11 @@ def admin_message_processing(uid, uname, text):
         mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
         IN_ADMIN_PANEL[uid] = ''
 
+    elif IN_ADMIN_PANEL[uid] == cnst.BTN_LAST_MSG_EDIT:
+        db.update_last_msg(text)
+        mt.send_message(uid, "Сохранено", cnst.KEYBOARD_ADMIN)
+        IN_ADMIN_PANEL[uid] = ''
+
     elif IN_ADMIN_PANEL[uid] == cnst.BTN_COLOR_BTN_EDIT:
         color = cnst.BTN_COLORS_MAP[text]
         if color is None:
@@ -247,7 +258,7 @@ def message_processing(uid, text):
         thread = mt.ThreadNewUserOrNote(uid, uname)
         thread.start()
 
-    elif cnst.__BTN_ENROLL.lower() in text.lower() or (text.lower() in cnst.USER_ACCEPT_WORDS and not_ready_to_enroll(uid)):
+    elif db.get_first_btn().lower() in text.lower() or (text.lower() in cnst.USER_ACCEPT_WORDS and not_ready_to_enroll(uid)):
         READY_TO_ENROLL[uid] = m.EnrollInfo(uid)
         quests = db.get_quest_msgs()
         quests.append('FAKE')
@@ -315,7 +326,8 @@ def message_processing(uid, text):
         elif not READY_TO_ENROLL[uid].number_is_sign():
             if utils.is_number_valid(text):
                 READY_TO_ENROLL[uid].set_number(text)
-                mt.send_message(uid, cnst.MSG_ENROLL_COMPLETED.format(READY_TO_ENROLL[uid].name),
+                msg = db.get_last_msg()
+                mt.send_message(uid, msg.format(READY_TO_ENROLL[uid].name),
                                 utils.get_user_keyboard())
                 mt.send_msg_to_admins(READY_TO_ENROLL[uid])
                 mt.send_data_to_uon(READY_TO_ENROLL[uid], uid)

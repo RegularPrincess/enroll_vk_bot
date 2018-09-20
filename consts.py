@@ -3,6 +3,7 @@
 
 # Кнопки
 import model as m
+
 BTN_CANCEL = "⛔ Отмена"
 BTN_BROADCAST = "Рассылка"
 BTN_ADD_ADMIN = "Добавить администратора"
@@ -16,13 +17,13 @@ BTN_QUESTIONS = 'Вопросы пользователю'
 BTN_END = 'Закончить'
 BTN_SKIP = 'Пропустить'
 BTN_FIRST_MSG_EDIT = "Ред-ть приветственное сообщение"
+BTN_LAST_MSG_EDIT = 'Ред-ть последнее сообщение'
 BTN_MAIL_MSG_EDIT = "Ред-ть запрос email"
 BTN_NUMBER_MSG_EDIT = "Ред-ть запрос номера"
 BTN_FIRST_BTN_EDIT = "Ред-ть текст кнопки"
 BTN_COLOR_BTN_EDIT = 'Ред-ть цвет кнопки'
-__COLOR_BTN = "positive"
-__BTN_ENROLL = "Записаиться на занятие"
-
+COLOR_BTN = "positive"
+BTN_ENROLL = "Записаиться на занятие"
 
 BTN_COLORS_MAP = {"Синий": "primary",
                   "Белый": "default",
@@ -39,8 +40,8 @@ MSG_WELCOME_FOLLOWER = 'Здравствуйте! {}, подберём вам л
 MSG_ACCEPT_NAME = 'Напишите, пожалуйста, как к Вам обращаться?'
 MSG_ACCEPT_EMAIL = 'Введите, пожалуйста, адрес Вашей електронной почты (email) 📧'
 MSG_ACCEPT_NUMBER = 'Введите, пожалуйста, Ваш номер телефона ☎'
-MSG_ENROLL_COMPLETED = 'Спасибо, {}! ' \
-                       'Мы очень ценим, что Вы выбрали нас! В ближайшее время наш сотрудник свяжется с Вами!'
+LAST_MSG = 'Спасибо, {}! ' \
+           'Мы очень ценим, что Вы выбрали нас! В ближайшее время наш сотрудник свяжется с Вами!'
 MSG_CANCELED_MESSAGE = 'Действие успешно отменено.'
 MSG_DEFAULT_ANSWER = 'Ничего не понятно('
 MSG_PLEASE_STAND_BY = 'Это может занять некоторое время...'
@@ -62,7 +63,7 @@ USER_RETURN_STATUS = 'return'
 USER_NOT_SUB_STATUS = 'notmember'
 
 # Сообщения для администраторов
-NOTIFY_ADMIN = 'Пользователь с id{} записался на подбор тура. \n\n' \
+NOTIFY_ADMIN = 'Записался пользователь с id{}. \n\n' \
                'Его данные: \n🖐 обращение - {},\n📧 email - {},\n☎ номер телефона - {}.\n{}'
 ADMIN_KEY_WORDS = ['admin', 'админ']
 MSG_YOU_NOT_ADMIN = 'Вы не являйтесь администратором.'
@@ -127,9 +128,9 @@ enroll_btn = [{
     "action": {
         "type": "text",
         "payload": "{\"button\": \"1\"}",
-        "label": __BTN_ENROLL
+        "label": BTN_ENROLL
     },
-    "color": __COLOR_BTN
+    "color": COLOR_BTN
 }]
 
 cancel_btn = [{
@@ -154,9 +155,9 @@ KEYBOARD_USER = {
             "action": {
                 "type": "text",
                 "payload": "{\"button\": \"1\"}",
-                "label": __BTN_ENROLL
+                "label": BTN_ENROLL
             },
-            "color": __COLOR_BTN
+            "color": COLOR_BTN
         }],
     ]
 }
@@ -182,18 +183,18 @@ KEYBOARD_CANCEL_AND_MSG_EDIT = {
             "action": {
                 "type": "text",
                 "payload": "{\"button\": \"1\"}",
-                "label": BTN_CANCEL
-            },
-            "color": "default"
-        }],
-        [{
-            "action": {
-                "type": "text",
-                "payload": "{\"button\": \"1\"}",
                 "label": BTN_FIRST_MSG_EDIT
             },
             "color": "default"
-        }],
+        },
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "{\"button\": \"1\"}",
+                    "label": BTN_LAST_MSG_EDIT
+                },
+                "color": "default"
+            }],
         [{
             "action": {
                 "type": "text",
@@ -211,7 +212,7 @@ KEYBOARD_CANCEL_AND_MSG_EDIT = {
                 "color": "default"
             }
         ],
-[{
+        [{
             "action": {
                 "type": "text",
                 "payload": "{\"button\": \"1\"}",
@@ -227,7 +228,15 @@ KEYBOARD_CANCEL_AND_MSG_EDIT = {
                 },
                 "color": "default"
             }
-        ]
+        ],
+        [{
+            "action": {
+                "type": "text",
+                "payload": "{\"button\": \"1\"}",
+                "label": BTN_CANCEL
+            },
+            "color": "default"
+        }]
     ]
 }
 
