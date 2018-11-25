@@ -197,6 +197,31 @@ def send_data_to_uon(data, uid):
     print(response.text)
 
 
+def send_data_to_my_doc(data, uid):
+    # today = datetime.datetime.today()
+    # t = today.time()
+    # d = today.date()
+    # flightdate_from = d
+    # flightdate_to = d.replace(year=d.year + 1)
+
+    note = 'Примечания : {}'.format("\n".join(data.answers))
+    params = '{' \
+             '"tourist_type":"tourist_temp",' \
+             '"preorder_manager_id":{},' \
+             '"comment":"{}"' \
+             '}'\
+        .format(cfg.my_doc_manager_id, note)
+    payload = {
+        'key': cfg.my_doc_key,
+        'params': params
+    }
+    print(payload)
+    url = 'https://{}.moidokumenti.ru/api/create-preorder'.format(cfg.my_doc_addr)
+    response = requests.post(url, params=payload)
+    print(response)
+    print(response.text)
+
+
 def get_quest_msgs_as_str():
     quests = db.get_quest_msgs()
     str = ''

@@ -191,7 +191,7 @@ class ThreadEmailingToAllSubs(Thread):
         us.emailing_to_all_subs_keyboard(self.uid, self.text)
 
 
-class ThreadSendDataToUON(Thread):
+class ThreadSendDataToCRM(Thread):
     def __init__(self, data, uid):
         """Инициализация потока"""
         Thread.__init__(self)
@@ -199,7 +199,7 @@ class ThreadSendDataToUON(Thread):
         self.uid = uid
 
     def run(self):
-        us.send_data_to_uon(self.data, self.uid)
+        us.send_data_to_my_doc(self.data, self.uid)
 
 
 class ThreadSendMsgMuch(Thread):
@@ -268,7 +268,7 @@ def emailing_to_all_subs_keyboard(uid, text):
 
 
 def send_data_to_uon(data, uid):
-    t = ThreadSendDataToUON(data, uid)
+    t = ThreadSendDataToCRM(data, uid)
     t.start()
 
 
