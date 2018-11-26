@@ -439,3 +439,6 @@ def init_cnsts():
     cnst.__COLOR_BTN = get_color_btn()
     print(cnst.__BTN_ENROLL + "_________--------------" + cnst.__COLOR_BTN)
 init_cnsts()
+
+l = get_list_bot_admins()
+print(l)
