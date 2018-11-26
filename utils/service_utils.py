@@ -207,8 +207,8 @@ def send_data_to_my_doc(data, uid):
     note = 'Примечания : {}'.format("\n".join(data.answers))
     params = '{' \
              '\"tourist_type\":\"tourist_temp\",' \
-             '\"preorder_manager_id\": ' + cfg.my_doc_manager_id +  \
-             '\"comment\":\"' + str(note) + '\"' \
+             '\"preorder_manager_id\": ' + str(cfg.my_doc_manager_id) +  \
+             '\"comment\":\"' + note + '\"' \
              '}'
     payload = {
         'key': cfg.my_doc_key,
