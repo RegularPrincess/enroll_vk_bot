@@ -208,7 +208,7 @@ def send_data_to_my_doc(data, uid):
     params = '{' \
              '\"tourist_type\":\"tourist_temp\",' \
              '\"preorder_manager_id\": ' + cfg.my_doc_manager_id +  \
-             '\"comment\":\"' + note + '\"' \
+             '\"comment\":\"' + str(note) + '\"' \
              '}'
     payload = {
         'key': cfg.my_doc_key,
