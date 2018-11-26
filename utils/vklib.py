@@ -52,7 +52,7 @@ def send_message_keyboard(user_id, text, keyboard):
         'v': api_ver
     }
     res = requests.post(config.vk_api_url + 'messages.send', data=data)
-    print(res)
+    print(res.text)
 
 
 def get_group_memebers(group_id, offset=0, count=1000):
@@ -141,7 +141,7 @@ def send_message_much_keyboard(user_ids, text, keyboard):
         'v': api_ver
     }
     answ = requests.post(config.vk_api_url + 'messages.send', data=data)
-    print(answ)
+    print(answ.text)
 
 
 def get_messages_upload_server(peer_id):

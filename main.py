@@ -9,7 +9,6 @@ import logging as log
 import config
 import service as s
 
-
 token = config.token
 confirmation_token = config.confirmation_token
 secret_key = config.secret_key

@@ -21,7 +21,7 @@ BTN_NUMBER_MSG_EDIT = "Ред-ть запрос номера"
 BTN_FIRST_BTN_EDIT = "Ред-ть текст кнопки"
 BTN_COLOR_BTN_EDIT = 'Ред-ть цвет кнопки'
 __COLOR_BTN = "positive"
-__BTN_ENROLL = "Записаиться на занятие"
+__BTN_ENROLL = "Подобрать тур"
 
 
 BTN_COLORS_MAP = {"Синий": "primary",
