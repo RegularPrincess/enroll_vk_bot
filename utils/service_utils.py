@@ -197,6 +197,40 @@ def send_data_to_uon(data, uid):
     print(response.text)
 
 
+def create_user_on_my_doc(data):
+    name = data.name
+    number = data.number
+    email = data.email
+    uid = data.uid
+    if name is None:
+        name = 'No name'
+    if number is None:
+        number = 'None'
+    if email is None:
+        email = 'None'
+    if uid is None:
+        uid = 'None'
+    params = '{' \
+            '"name":"' + name + '",' \
+            '"tel":"' + number + '",' \
+            '"email":"' + email + '",' \
+            '"manager_id":"' + str(cfg.my_doc_manager_id) + '",' \
+            '"vk":"id' + str(uid) + '"'\
+            '}'
+    payload = {
+        'key': cfg.my_doc_key,
+        'params': params
+    }
+    print(payload)
+    url = 'https://{}.moidokumenti.ru/api/add-tourist-temp'.format(cfg.my_doc_addr)
+    response = requests.post(url, params=payload)
+    print(response)
+    print(response.text)
+    j = json.loads(response.text)
+    id = j['tourist_temp_id']
+    return id
+
+
 def send_data_to_my_doc(data, uid):
     # today = datetime.datetime.today()
     # t = today.time()
@@ -204,11 +238,14 @@ def send_data_to_my_doc(data, uid):
     # flightdate_from = d
     # flightdate_to = d.replace(year=d.year + 1)
 
+    id = create_user_on_my_doc(data)
+
     note = 'Примечания - {}'.format("; ".join(data.answers))
     params = '{' \
              '"tourist_type":"tourist_temp",' \
              '"preorder_manager_id": ' + str(cfg.my_doc_manager_id) + ', ' \
-             '"comment":"' + note + '"' \
+             '"comment":"' + note + '",' \
+            '"tourist_id":' + str(id)+ \
              '}'
     payload = {
         'key': cfg.my_doc_key,
