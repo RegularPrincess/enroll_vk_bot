@@ -204,11 +204,11 @@ def send_data_to_my_doc(data, uid):
     # flightdate_from = d
     # flightdate_to = d.replace(year=d.year + 1)
 
-    note = 'Примечания : {}'.format("\n".join(data.answers))
+    note = 'Примечания - {}'.format("; ".join(data.answers))
     params = '{' \
-             '\"tourist_type\":\"tourist_temp\",' \
-             '\"preorder_manager_id\": ' + str(cfg.my_doc_manager_id) +  \
-             '\"comment\":\"' + note + '\"' \
+             '"tourist_type":"tourist_temp",' \
+             '"preorder_manager_id": ' + str(cfg.my_doc_manager_id) + ', ' \
+             '"comment":"' + note + '"' \
              '}'
     payload = {
         'key': cfg.my_doc_key,
@@ -220,6 +220,9 @@ def send_data_to_my_doc(data, uid):
     print(response)
     print(response.text)
 
+d =m.EnrollInfo(1)
+d.answers = ['1 jndtn', '2 ответ']
+send_data_to_my_doc(d, 12)
 
 def get_quest_msgs_as_str():
     quests = db.get_quest_msgs()
